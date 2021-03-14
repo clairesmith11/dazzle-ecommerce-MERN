@@ -1,0 +1,14 @@
+main {
+  min-height: 80vh;
+}
+
+.product-badge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  padding: 7px;
+}
+
+.rating i {
+  color: var(--warning);
+}
