@@ -14,9 +14,12 @@ const Header = () => {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Form inline>
                             <FormControl type="text" placeholder="Search" className="ml-sm-2" />
-                            <Button variant="outline-success"><i class="fas fa-search"></i></Button>
+                            <Button variant="outline-success"><i className="fas fa-search"></i></Button>
                         </Form>
                         <Nav className="ml-auto">
+                            <LinkContainer to="/wishlist">
+                                <Nav.Link><i className='fas fa-heart mr-1'></i>Wishlist</Nav.Link>
+                            </LinkContainer>
                             <LinkContainer to="/bag">
                                 <Nav.Link><i className='fas fa-shopping-bag mr-1'></i>Bag</Nav.Link>
                             </LinkContainer>

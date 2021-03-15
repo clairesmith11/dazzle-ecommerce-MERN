@@ -4,8 +4,8 @@ import { Card } from 'react-bootstrap';
 
 const Product = ({ product }) => {
     return (
-        <Card className="shadow">
-            {product.sale && <span class="product-badge badge badge-secondary">Sale</span>}
+        <Card className="shadow my-3">
+            {product.sale && <span className="product-badge badge badge-secondary">Sale</span>}
             <Link to={`/product/${product._id}`}>
                 <Card.Img variant="top" src={product.image} />
             </Link>
