@@ -1,11 +1,9 @@
 import { Alert } from 'react-bootstrap';
 
-import React, { useState } from 'react';
-
-const Message = ({ message, type }) => {
+const Message = ({ message, type, heading }) => {
     return (
-        <Alert variant={type}>
-            <Alert.Heading>Error</Alert.Heading>
+        <Alert variant={type} className="my-4">
+            <Alert.Heading>{heading}</Alert.Heading>
             <p>{message}</p>
         </Alert>
     );

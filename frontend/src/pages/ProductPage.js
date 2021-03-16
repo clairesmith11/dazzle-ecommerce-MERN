@@ -5,6 +5,7 @@ import { Row, Col, Image } from 'react-bootstrap';
 
 import Rating from '../components/Rating';
 import Tab from '../components/Tab';
+import QuantityButton from '../components/QuantityButton';
 import { listProductDetails, clearProductDetails } from '../actions/productActions';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
@@ -59,17 +60,15 @@ const ProductPage = ({ history, match }) => {
                         {product.salePrice ? <h3>${product.salePrice}</h3> : <h3>${product.price}</h3>}
                         <div className="d-flex my-3">
                             {/* Add and subtract quantity buttons */}
-                            <button
-                                type="button"
-                                className="btn btn-outline-primary py-0 mr-3"
-                                disabled={product.inStock === 0}
-                                onClick={subtractQuantity}>-</button>
+                            <QuantityButton
+                                type="subtract"
+                                clickable={product.inStock === 0}
+                                clicked={subtractQuantity} />
                             <h4>{quantitySelected}</h4>
-                            <button
-                                type="button"
-                                className="btn btn-outline-primary py-0 mx-3"
-                                disabled={product.inStock === 0}
-                                onClick={addQuantity}>+</button>
+                            <QuantityButton
+                                type="add"
+                                clickable={product.inStock === 0}
+                                clicked={addQuantity} />
                             {/* Add to cart button */}
                             <button
                                 type="button"

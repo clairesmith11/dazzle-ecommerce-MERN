@@ -1,5 +1,5 @@
 import { STATES } from 'mongoose';
-import { BAG_ADD_ITEM } from '../constants/bagConstants';
+import { BAG_ADD_ITEM, BAG_REMOVE_ITEM } from '../constants/bagConstants';
 
 export const bagReducer = (initialState = { bagItems: [] }, action) => {
     switch (action.type) {
@@ -20,6 +20,11 @@ export const bagReducer = (initialState = { bagItems: [] }, action) => {
                     bagItems: [...initialState.bagItems, item]
                 };
             }
+        case BAG_REMOVE_ITEM:
+            return {
+                ...initialState,
+                bagItems: initialState.bagItems.filter(item => item.product !== action.payload)
+            };
         default:
             return initialState;
     }

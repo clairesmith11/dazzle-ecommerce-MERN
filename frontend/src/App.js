@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import ProductPage from './pages/ProductPage';
 import BagPage from './pages/BagPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/" component={Home} exact />
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/bag/:id?" component={BagPage} />
+          <Route path="/checkout" component={CheckoutPage} />
         </Container>
       </main>
       <Footer />
