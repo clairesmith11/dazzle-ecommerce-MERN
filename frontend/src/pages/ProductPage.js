@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Image } from 'react-bootstrap';
-import axios from 'axios';
 
 import Rating from '../components/Rating';
 import Tab from '../components/Tab';
@@ -10,11 +9,12 @@ import { listProductDetails, clearProductDetails } from '../actions/productActio
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
 
-const ProductPage = ({ match }) => {
+const ProductPage = ({ history, match }) => {
     const dispatch = useDispatch();
     const productList = useSelector(state => state.productDetails);
     const { loading, error, product } = productList;
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [quantitySelected, setQuantitySelected] = useState(1);
 
     useEffect(() => {
         dispatch(listProductDetails(match.params.id));
@@ -27,6 +27,22 @@ const ProductPage = ({ match }) => {
 
     const toggleWishlist = () => {
         setIsWishlisted(!isWishlisted);
+    };
+
+    const addQuantity = () => {
+        if (quantitySelected < product.inStock) {
+            setQuantitySelected(quantitySelected + 1);
+        }
+    };
+
+    const subtractQuantity = () => {
+        if (quantitySelected > 1) {
+            setQuantitySelected(quantitySelected - 1);
+        }
+    };
+
+    const addToCartHandler = () => {
+        history.push(`/bag/${match.params.id}/?quantity=${quantitySelected}`);
     };
 
     return (
@@ -42,10 +58,28 @@ const ProductPage = ({ match }) => {
                         <Rating rating={product.rating} numReviews={product.numReviews} />
                         {product.salePrice ? <h3>${product.salePrice}</h3> : <h3>${product.price}</h3>}
                         <div className="d-flex my-3">
-                            <button type="button" className="btn btn-outline-primary py-0 mr-3">-</button>
-                            <h4>1</h4>
-                            <button type="button" className="btn btn-outline-primary py-0 mx-3">+</button>
-                            <button type="button" className="btn btn-primary" disabled={product.inStock === 0}>Add to bag</button>
+                            {/* Add and subtract quantity buttons */}
+                            <button
+                                type="button"
+                                className="btn btn-outline-primary py-0 mr-3"
+                                disabled={product.inStock === 0}
+                                onClick={subtractQuantity}>-</button>
+                            <h4>{quantitySelected}</h4>
+                            <button
+                                type="button"
+                                className="btn btn-outline-primary py-0 mx-3"
+                                disabled={product.inStock === 0}
+                                onClick={addQuantity}>+</button>
+                            {/* Add to cart button */}
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                disabled={product.inStock === 0}
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title={product.inStock === 0 && "Out of Stock"}
+                                onClick={addToCartHandler}>Add to bag</button>
+                            {/* Wislist button */}
                             <button
                                 type="button"
                                 className="btn btn-outline-primary py-0 mx-1"

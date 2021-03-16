@@ -3,13 +3,21 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
+import { bagReducer } from './reducers/bagReducers';
 
 const reducer = combineReducers({
     productList: productListReducer,
-    productDetails: productDetailsReducer
+    productDetails: productDetailsReducer,
+    bag: bagReducer
 });
 
-const initialState = {};
+const storedBag = localStorage.getItem('bagItems')
+    ? JSON.parse(localStorage.getItem('bagItems'))
+    : [];
+
+const initialState = {
+    bag: { bagItems: storedBag }
+};
 
 const middleware = [thunk];
 

@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import ProductPage from './pages/ProductPage';
+import BagPage from './pages/BagPage';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Container>
           <Route path="/" component={Home} exact />
           <Route path="/product/:id" component={ProductPage} />
+          <Route path="/bag/:id?" component={BagPage} />
         </Container>
       </main>
       <Footer />
