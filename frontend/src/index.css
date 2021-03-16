@@ -12,3 +12,7 @@ main {
 .rating i {
   color: var(--warning);
 }
+
+.large-box {
+  height: 60vh;
+}
