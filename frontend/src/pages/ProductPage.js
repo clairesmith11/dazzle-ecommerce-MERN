@@ -57,7 +57,13 @@ const ProductPage = ({ history, match }) => {
                     <Col md={6}>
                         <h2>{product.name}</h2>
                         <Rating rating={product.rating} numReviews={product.numReviews} />
-                        {product.salePrice ? <h3>${product.salePrice}</h3> : <h3>${product.price}</h3>}
+                        {product.salePrice
+                            ? <h3>${product.salePrice}
+                                <span className="badge badge-secondary ml-2">
+                                    {`Save ${Math.round(100 - ((product.salePrice / product.price * 100)))}%!`}
+                                </span>
+                            </h3>
+                            : <h3>${product.price}</h3>}
                         <div className="d-flex my-3">
                             {/* Add and subtract quantity buttons */}
                             <QuantityButton

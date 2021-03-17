@@ -16,3 +16,13 @@ main {
 .large-box {
   height: 60vh;
 }
+
+.badge {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 800px) {
+  .price-label {
+    display: none;
+  }
+}

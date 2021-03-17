@@ -6,9 +6,12 @@ import * as productController from '../controllers/productController.js';
 const router = express.Router();
 
 /////PRODUCT ROUTES/////
-router.get('/', productController.getAllProducts);
-router.get('/:id', productController.getProductById);
-router.post('/', productController.createProduct);
-router.delete('/:id', productController.deleteProduct);
+router.route('/')
+    .get(productController.getAllProducts)
+    .post(productController.createProduct);
+
+router.route('/:id')
+    .get(productController.getProductById)
+    .delete(productController.deleteProduct);
 
 export default router;

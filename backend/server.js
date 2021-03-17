@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 
 import { notFoundError, errorHandler } from './errorHandler.js';
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import connectDB from './config/db.js';
 
 //Set up .env file
@@ -14,10 +14,11 @@ connectDB();
 
 //Initialize app
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 
 //Routing
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
 //Error handling
 app.use(notFoundError);

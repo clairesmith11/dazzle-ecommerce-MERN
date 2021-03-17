@@ -1,4 +1,3 @@
-import { STATES } from 'mongoose';
 import { BAG_ADD_ITEM, BAG_REMOVE_ITEM } from '../constants/bagConstants';
 
 export const bagReducer = (initialState = { bagItems: [] }, action) => {

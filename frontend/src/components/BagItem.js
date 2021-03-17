@@ -8,8 +8,6 @@ const BagItem = ({ item }) => {
     const dispatch = useDispatch();
 
     const changeQuantityHandler = (qty) => {
-        console.log(qty);
-        console.log(item.product);
         dispatch(addItemToBag(item.product, qty));
     };
 
@@ -42,7 +40,7 @@ const BagItem = ({ item }) => {
 
             </td>
             <td>
-                <h4 className="text-right">${item.price * item.quantity}</h4></td>
+                <h4 className="text-right">${(item.price * item.quantity).toFixed(2)}</h4></td>
         </tr>
     );
 };
