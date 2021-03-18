@@ -1,8 +1,19 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, Container, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from 'react-bootstrap';
 
-const Header = () => {
+import { userLogout } from '../actions/userActions';
+
+const Header = ({ history }) => {
+    const dispatch = useDispatch();
+    const userInfo = useSelector(state => state.user);
+    const { loggedInUser } = userInfo;
+
+    const logOutHandler = () => {
+        dispatch(userLogout());
+    };
+
     return (
         <header>
             <Navbar bg="light" variant="light" expand="lg">
@@ -23,9 +34,18 @@ const Header = () => {
                             <LinkContainer to="/bag">
                                 <Nav.Link><i className='fas fa-shopping-bag mr-1'></i>Bag</Nav.Link>
                             </LinkContainer>
-                            <LinkContainer to="/login">
-                                <Nav.Link><i className='fas fa-user mr-1'></i>Sign in</Nav.Link>
-                            </LinkContainer>
+                            {loggedInUser ? (
+                                <NavDropdown title={loggedInUser.name}>
+                                    <LinkContainer to="/profile">
+                                        <NavDropdown.Item>My Account</NavDropdown.Item>
+                                    </LinkContainer>
+                                    <NavDropdown.Item onClick={logOutHandler}>Log out</NavDropdown.Item>
+                                </NavDropdown>
+                            ) :
+                                <LinkContainer to="/login">
+                                    <Nav.Link><i className='fas fa-user mr-1'></i>Sign in</Nav.Link>
+                                </LinkContainer>
+                            }
 
                         </Nav>
                     </Navbar.Collapse>

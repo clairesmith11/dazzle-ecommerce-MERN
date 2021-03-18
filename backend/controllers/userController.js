@@ -30,6 +30,8 @@ export const loginUser = asyncHandler(async (req, res) => {
     });
 });
 
+/////REGISTER NEW USERS/////
+//All users: No authentication//
 export const registerNewUser = asyncHandler(async (req, res) => {
     const { email, name, password } = req.body;
 
@@ -54,8 +56,20 @@ export const registerNewUser = asyncHandler(async (req, res) => {
 
 });
 
+/////SHOW USER'S PROFILE/////
+//Protected route: only user with valid token//
 export const getUserById = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
     res.send(req.user);
+});
+
+/////UPDATE USER'S PROFILE/////
+//Protected route: only user with valid token//
+export const updateUser = asyncHandler(async (req, res) => {
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+        password: req.body.password
+    }, { new: true, runValidators: true });
+
+    res.send(updatedUser);
 });

@@ -4,19 +4,28 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { productListReducer, productDetailsReducer } from './reducers/productReducers';
 import { bagReducer } from './reducers/bagReducers';
+import { userLoginReducer, userRegisterReducer } from './reducers/userReducers';
 
 const reducer = combineReducers({
     productList: productListReducer,
     productDetails: productDetailsReducer,
-    bag: bagReducer
+    bag: bagReducer,
+    user: userLoginReducer,
+    newUser: userRegisterReducer
 });
 
 const storedBag = localStorage.getItem('bagItems')
     ? JSON.parse(localStorage.getItem('bagItems'))
     : [];
 
+const storedUser = localStorage.getItem('loggedInUser')
+    ? JSON.parse(localStorage.getItem('loggedInUser'))
+    : [];
+
+
 const initialState = {
-    bag: { bagItems: storedBag }
+    bag: { bagItems: storedBag },
+    user: { loggedInUser: storedUser }
 };
 
 const middleware = [thunk];

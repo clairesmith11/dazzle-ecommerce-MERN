@@ -9,6 +9,7 @@ import ProductPage from './pages/ProductPage';
 import BagPage from './pages/BagPage';
 import CheckoutPage from './pages/CheckoutPage';
 import SignInPage from './pages/SignInPage';
+import UserAccountPage from './pages/UserAccountPage';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/bag/:id?" component={BagPage} />
           <Route path="/checkout" component={CheckoutPage} />
           <Route path='/login' component={SignInPage} />
+          <Route path="/profile" component={UserAccountPage} />
         </Container>
       </main>
       <Footer />

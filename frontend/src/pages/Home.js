@@ -19,7 +19,7 @@ const Home = (props) => {
     return (
         <div>
             <h1>Latest Products</h1>
-            {loading ? <LoadingSpinner /> : error ? <Message message={error} type="danger" heading="Error" /> :
+            {loading ? <LoadingSpinner size="large" /> : error ? <Message message={error} type="danger" heading="Error" /> :
                 <Row>
                     {products.map(product => {
                         return (
