@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from 'react-bootstrap';
@@ -8,10 +9,11 @@ import { userLogout } from '../actions/userActions';
 const Header = ({ history }) => {
     const dispatch = useDispatch();
     const userInfo = useSelector(state => state.user);
-    const { loggedInUser } = userInfo;
+    const { user } = userInfo;
 
     const logOutHandler = () => {
         dispatch(userLogout());
+        history.push('/login');
     };
 
     return (
@@ -34,8 +36,8 @@ const Header = ({ history }) => {
                             <LinkContainer to="/bag">
                                 <Nav.Link><i className='fas fa-shopping-bag mr-1'></i>Bag</Nav.Link>
                             </LinkContainer>
-                            {loggedInUser ? (
-                                <NavDropdown title={loggedInUser.name}>
+                            {user ? (
+                                <NavDropdown title={user.name}>
                                     <LinkContainer to="/profile">
                                         <NavDropdown.Item>My Account</NavDropdown.Item>
                                     </LinkContainer>
@@ -55,4 +57,4 @@ const Header = ({ history }) => {
     );
 };
 
-export default Header;
+export default withRouter(Header);

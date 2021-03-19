@@ -11,6 +11,8 @@ const BagPage = ({ match, location, history }) => {
     const quantity = location.search ? location.search.split('=')[1] : 1;
     const bag = useSelector(state => state.bag);
     const { bagItems } = bag;
+    const userInfo = useSelector(state => state.user);
+    const { user } = userInfo;
 
     const dispatch = useDispatch();
 
@@ -22,7 +24,12 @@ const BagPage = ({ match, location, history }) => {
     }, [dispatch, productId, quantity]);
 
     const checkOutHandler = () => {
-        history.push('/checkout');
+        if (user) {
+            history.push('/checkout');
+        } else {
+            history.push('/login');
+        }
+
     };
 
     return (

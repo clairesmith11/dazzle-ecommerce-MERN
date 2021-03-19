@@ -25,7 +25,7 @@ const storedUser = localStorage.getItem('loggedInUser')
 
 const initialState = {
     bag: { bagItems: storedBag },
-    user: { loggedInUser: storedUser }
+    user: { user: storedUser }
 };
 
 const middleware = [thunk];

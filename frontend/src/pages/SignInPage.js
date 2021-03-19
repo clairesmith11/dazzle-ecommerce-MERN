@@ -15,7 +15,7 @@ const SignInPage = ({ history }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    //required a page refresh to display logged in user...
     useEffect(() => {
         if (user) {
             history.push('/');
@@ -34,7 +34,6 @@ const SignInPage = ({ history }) => {
     const signupHandler = (e) => {
         e.preventDefault();
         dispatch(userRegister(name, email, password));
-        console.log('signed up');
     };
 
     return (
