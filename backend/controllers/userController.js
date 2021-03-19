@@ -67,9 +67,21 @@ export const getUserById = asyncHandler(async (req, res) => {
 /////UPDATE USER'S PROFILE/////
 //Protected route: only user with valid token//
 export const updateUser = asyncHandler(async (req, res) => {
-    const updatedUser = await User.findByIdAndUpdate(req.user._id, {
-        password: req.body.password
-    }, { new: true, runValidators: true });
+    const user = await User.findById(req.user._id);
 
-    res.send(updatedUser);
+    if (user) {
+        user.password = req.body.password;
+    } else {
+        res.status(404);
+        throw new Error('Could not find user with that ID');
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        token: createToken(updatedUser._id)
+    });
 });

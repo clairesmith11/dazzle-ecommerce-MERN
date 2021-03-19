@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Form } from 'react-bootstrap';
+import axios from 'axios';
+
+import Message from '../components/Message';
 
 const UserAccountPage = () => {
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [showAddressForm, setShowAddressForm] = useState(false);
+    const [updatedPassword, setUpdatedPassword] = useState('');
+    const [message, setMessage] = useState(null);
 
     const toggleForm = (formType) => {
         if (formType === 'password') {
@@ -15,6 +20,23 @@ const UserAccountPage = () => {
         } else {
             setShowAddressForm(!showAddressForm);
         }
+    };
+
+    const updatePassword = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.patch('/api/users/profile',
+                { password: updatedPassword },
+                {
+                    'Content-Type': 'application/json',
+                    headers:
+                        { Authorization: `Bearer ${user.token}` }
+                });
+            setMessage('Password successfully changed!');
+        } catch (error) {
+            setMessage(error.response.data.message);
+        }
+
     };
 
     return (
@@ -29,14 +51,24 @@ const UserAccountPage = () => {
                             <Card.Title>{user.name}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">{user.email}</Card.Subtitle>
                             <Button variant="link" className="mb-3" onClick={() => toggleForm('password')}>Change password</Button>
+                            {message &&
+                                <Message
+                                    type={message === 'Password successfully changed!' ? 'success' : 'danger'}
+                                    message={message} />
+                            }
                             {showPasswordForm &&
-                                <Form>
+                                <Form onSubmit={(e) => updatePassword(e)}>
                                     <Form.Group>
                                         <Form.Control
-                                            type="text"
-                                            placeholder="Enter new password" />
+                                            type="password"
+                                            placeholder="Enter new password"
+                                            value={updatedPassword}
+                                            onChange={(e) => setUpdatedPassword(e.target.value)} />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit" className="mb-3">Update</Button>
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                        className="mb-3">Update</Button>
                                 </Form>
                             }
                             <Card.Text>
