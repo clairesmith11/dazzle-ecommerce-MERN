@@ -2,11 +2,25 @@ main {
   min-height: 80vh;
 }
 
+.badge {
+  font-size: 0.9rem;
+}
+
 .product-badge {
   position: absolute;
   top: 7px;
   left: 7px;
   padding: 7px;
+}
+
+.badge-pill {
+  position: absolute;
+  left: 100px;
+  top: -2px;
+}
+
+.checkout-summary-item {
+  position: relative;
 }
 
 .rating i {
@@ -17,12 +31,20 @@ main {
   height: 60vh;
 }
 
-.badge {
-  font-size: 0.9rem;
-}
-
 @media (max-width: 800px) {
-  .price-label {
+  .hide-small {
     display: none;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
+  h4 {
+    font-size: 1.1rem;
+  }
+  h5 {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.8rem;
   }
 }

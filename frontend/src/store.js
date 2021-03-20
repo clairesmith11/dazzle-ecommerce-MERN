@@ -22,10 +22,14 @@ const storedUser = localStorage.getItem('loggedInUser')
     ? JSON.parse(localStorage.getItem('loggedInUser'))
     : [];
 
+const storedShippingAddress = localStorage.getItem('shippingAddress')
+    ? JSON.parse(localStorage.getItem('shippingAddress'))
+    : {};
+
 
 const initialState = {
-    bag: { bagItems: storedBag },
-    user: { user: storedUser }
+    bag: { bagItems: storedBag, shippingAddress: storedShippingAddress },
+    user: { user: storedUser },
 };
 
 const middleware = [thunk];

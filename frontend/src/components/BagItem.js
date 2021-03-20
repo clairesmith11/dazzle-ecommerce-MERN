@@ -39,7 +39,7 @@ const BagItem = ({ item }) => {
                 </div>
 
             </td>
-            <td>
+            <td className="hide-small">
                 <h4 className="text-right">${(item.price * item.quantity).toFixed(2)}</h4></td>
         </tr>
     );

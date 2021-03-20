@@ -10,6 +10,7 @@ import BagPage from './pages/BagPage';
 import CheckoutPage from './pages/CheckoutPage';
 import SignInPage from './pages/SignInPage';
 import UserAccountPage from './pages/UserAccountPage';
+import PaymentPage from './pages/PaymentPage';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/checkout" component={CheckoutPage} />
           <Route path='/login' component={SignInPage} />
           <Route path="/profile" component={UserAccountPage} />
+          <Route path="/payment" component={PaymentPage} />
         </Container>
       </main>
       <Footer />

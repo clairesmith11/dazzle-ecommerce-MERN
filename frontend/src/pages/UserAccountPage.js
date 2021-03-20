@@ -50,7 +50,7 @@ const UserAccountPage = () => {
                         <Card.Body>
                             <Card.Title>{user.name}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">{user.email}</Card.Subtitle>
-                            <Button variant="link" className="mb-3" onClick={() => toggleForm('password')}>Change password</Button>
+                            <Button variant="link" className="mb-3 btn-sm" onClick={() => toggleForm('password')}>Change password</Button>
                             {message &&
                                 <Message
                                     type={message === 'Password successfully changed!' ? 'success' : 'danger'}
@@ -68,7 +68,7 @@ const UserAccountPage = () => {
                                     <Button
                                         variant="primary"
                                         type="submit"
-                                        className="mb-3">Update</Button>
+                                        className="mb-3 btn-sm">Update</Button>
                                 </Form>
                             }
                             <Card.Text>
@@ -76,7 +76,7 @@ const UserAccountPage = () => {
                                 <br />
                                 Lafayette, IN 47905
                             </Card.Text>
-                            <Button variant="link" className="mb-3" onClick={() => toggleForm('address')}>Change address</Button>
+                            <Button variant="link" className="mb-3 btn-sm" onClick={() => toggleForm('address')}>Change address</Button>
                             {showAddressForm &&
                                 <Form>
                                     <Form.Group>
@@ -97,7 +97,7 @@ const UserAccountPage = () => {
                                             type="text"
                                             placeholder="Enter zip code" />
                                     </Form.Group>
-                                    <Button variant="primary" type="submit">Update</Button>
+                                    <Button variant="primary" type="submit" className="btn-sm">Update</Button>
                                 </Form>
                             }
                         </Card.Body>

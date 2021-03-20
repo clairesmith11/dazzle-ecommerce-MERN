@@ -47,8 +47,8 @@ const BagPage = ({ match, location, history }) => {
                         <thead>
                             <tr className="table-secondary">
                                 <th scope="col">Image</th>
-                                <th scope="col">Details</th>
-                                <th scope="col" className="text-right price-label">Total</th>
+                                <th scope="col" className="details-label">Details</th>
+                                <th scope="col" className="text-right hide-small">Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,12 +56,12 @@ const BagPage = ({ match, location, history }) => {
                         </tbody>
                         <tfoot>
                             <tr className="table-light">
-                                <td></td>
+                                <td className="hide-small"></td>
                                 <td></td>
                                 <td className="text-right">
                                     <h5>Subtotal: ({bagItems.reduce((acc, cur) => acc + cur.quantity, 0)}) items</h5>
                                     <h3 className="text-secondary">
-                                        ${bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)).toFixed(2), 0)}
+                                        ${bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0)}
                                     </h3>
                                     <p>Shipping fees and taxes will be added at checkout</p>
                                     <button className="btn btn-primary my-2" onClick={checkOutHandler}>Check out</button>
