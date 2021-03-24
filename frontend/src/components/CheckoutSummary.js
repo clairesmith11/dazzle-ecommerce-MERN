@@ -1,16 +1,42 @@
 import React from 'react';
-import { Image } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { Col } from 'react-bootstrap';
 
-const CheckoutSummary = ({ item }) => {
+import CheckoutItem from './CheckoutItem';
+
+const CheckoutSummary = () => {
+    const bag = useSelector(state => state.bag);
+    const { bagItems } = bag;
+
+    const itemsPrice = bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0);
+    const shippingPrice = itemsPrice < 200 ? 9.99 : 0;
+    const taxesPrice = +(itemsPrice * 0.07).toFixed(2);
+    const totalPrice = +(itemsPrice + shippingPrice + taxesPrice).toFixed(2);
+
     return (
-        <div className="checkout-summary-item d-flex align-items-center justify-content-between my-2">
+        <Col md={5} className="bg-light p-4 ml-5">
             <div>
-                <Image style={{ width: '120px' }} src={item.image} thumbnail />
-                <span className="badge badge-secondary badge-pill">{item.quantity}</span>
+                {bagItems.map(item => <CheckoutItem item={item} key={item.product} />)}
             </div>
-            <p>{item.name}</p>
-            <p>${(item.price * item.quantity).toFixed(2)}</p>
-        </div>
+            <hr />
+            <div className="d-flex justify-content-between">
+                <p>Subtotal</p>
+                <p>${itemsPrice}</p>
+            </div>
+            <div className="d-flex justify-content-between">
+                <p>Taxes</p>
+                <p>${taxesPrice}</p>
+            </div>
+            <div className="d-flex justify-content-between">
+                <p>Shipping</p>
+                <p>${shippingPrice}</p>
+            </div>
+            <hr />
+            <div className="d-flex justify-content-between">
+                <h5>Total</h5>
+                <h5><strong>${totalPrice}</strong></h5>
+            </div>
+        </Col>
     );
 };
 

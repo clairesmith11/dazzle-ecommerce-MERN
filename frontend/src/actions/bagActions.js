@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { BAG_ADD_ITEM, BAG_REMOVE_ITEM, BAG_SAVE_SHIPPING_ADDRESS } from '../constants/bagConstants';
+import {
+    BAG_ADD_ITEM,
+    BAG_REMOVE_ITEM,
+    BAG_SAVE_SHIPPING_ADDRESS,
+    BAG_SAVE_PAYMENT_METHOD
+} from '../constants/bagConstants';
 
 export const addItemToBag = (id, quantity) => async (dispatch, getState) => {
     const { data } = await axios.get(`/api/products/${id}`);
@@ -34,4 +39,11 @@ export const saveShippingAddress = (formData) => (dispatch) => {
     });
 
     localStorage.setItem('shippingAddress', JSON.stringify(formData));
+};
+
+export const savePaymentMethod = (method) => (dispatch) => {
+    dispatch({
+        type: BAG_SAVE_PAYMENT_METHOD,
+        payload: method
+    });
 };

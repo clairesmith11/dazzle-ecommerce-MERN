@@ -1,4 +1,9 @@
-import { BAG_ADD_ITEM, BAG_REMOVE_ITEM, BAG_SAVE_SHIPPING_ADDRESS } from '../constants/bagConstants';
+import {
+    BAG_ADD_ITEM,
+    BAG_REMOVE_ITEM,
+    BAG_SAVE_SHIPPING_ADDRESS,
+    BAG_SAVE_PAYMENT_METHOD
+} from '../constants/bagConstants';
 
 export const bagReducer = (initialState = { bagItems: [], shippingAddress: {} }, action) => {
     switch (action.type) {
@@ -29,7 +34,14 @@ export const bagReducer = (initialState = { bagItems: [], shippingAddress: {} },
                 ...initialState,
                 shippingAddress: action.payload
             };
+        case BAG_SAVE_PAYMENT_METHOD:
+            return {
+                ...initialState,
+                paymentMethod: action.payload
+            };
         default:
             return initialState;
     }
 };
+
+//call bag reset when user logs out

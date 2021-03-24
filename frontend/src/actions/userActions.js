@@ -63,6 +63,7 @@ export const userRegister = (name, email, password) => async (dispatch, getState
 
 export const userLogout = () => (dispatch) => {
     localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('bagItems');
     dispatch({
         type: USER_LOGOUT
     });

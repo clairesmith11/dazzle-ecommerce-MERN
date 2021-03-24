@@ -10,13 +10,11 @@ import Breadcrumbs from '../components/Breadcrumbs';
 
 const CheckoutPage = ({ history }) => {
     const bag = useSelector(state => state.bag);
-    const { bagItems, shippingAddress } = bag;
-    const totalPrice = bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0);
-    const shippingPrice = totalPrice < 200 ? 9.99 : 0;
+    const { shippingAddress } = bag;
 
     const [address, setAddress] = useState(shippingAddress.address);
     const [city, setCity] = useState(shippingAddress.city);
-    const [usState, setUsState] = useState(shippingAddress.state);
+    const [usState, setUsState] = useState(shippingAddress.usState);
     const [zipCode, setZipCode] = useState(shippingAddress.zipCode);
 
     const dispatch = useDispatch();
@@ -30,11 +28,11 @@ const CheckoutPage = ({ history }) => {
     return (
         <div>
             <h2>Check out</h2>
-            <div className="d-flex mb-4">
-                <Breadcrumbs page='info' />
-            </div>
             <Row className="gy-5">
                 <Col md={6}>
+                    <div className="d-flex mb-4">
+                        <Breadcrumbs page='info' />
+                    </div>
                     <h5>Shipping address</h5>
                     <Form className="my-3" onSubmit={submitHandler}>
                         <Form.Group>
@@ -74,25 +72,7 @@ const CheckoutPage = ({ history }) => {
                         >Continue</Button>
                     </Form>
                 </Col>
-                <Col md={5} className="bg-light p-4 ml-5">
-                    <div>
-                        {bagItems.map(item => <CheckoutSummary item={item} key={item.product} />)}
-                    </div>
-                    <hr />
-                    <div className="d-flex justify-content-between">
-                        <p>Subtotal</p>
-                        <p>${totalPrice}</p>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                        <p>Shipping</p>
-                        <p>${shippingPrice}</p>
-                    </div>
-                    <hr />
-                    <div className="d-flex justify-content-between">
-                        <h5>Total</h5>
-                        <h5><strong>${(totalPrice + shippingPrice).toFixed(2)}</strong></h5>
-                    </div>
-                </Col>
+                <CheckoutSummary />
             </Row>
         </div>
     );
