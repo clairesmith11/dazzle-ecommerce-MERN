@@ -6,7 +6,7 @@ import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from '
 
 import { userLogout } from '../actions/userActions';
 
-const Header = ({ history }) => {
+const Header = ({ history, location }) => {
     const dispatch = useDispatch();
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;

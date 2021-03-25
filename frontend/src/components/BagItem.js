@@ -26,7 +26,7 @@ const BagItem = ({ item }) => {
                 <div className="row d-flex align-items-center">
                     <QuantityButton
                         type="subtract"
-                        clickable={item.quantity === 0}
+                        clickable={item.quantity === 1}
                         clicked={() => changeQuantityHandler(item.quantity - 1)}
                     />
                     <h4>{item.quantity}</h4>

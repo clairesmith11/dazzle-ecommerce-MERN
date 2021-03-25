@@ -16,6 +16,12 @@ const BagPage = ({ match, location, history }) => {
 
     const dispatch = useDispatch();
 
+    const itemsPrice = bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0);
+
+    const roundNumbers = (num) => {
+        return num.toFixed(2);
+    };
+
     useEffect(() => {
         if (productId) {
             dispatch(addItemToBag(productId, quantity));
@@ -61,7 +67,7 @@ const BagPage = ({ match, location, history }) => {
                                 <td className="text-right">
                                     <h5>Subtotal: ({bagItems.reduce((acc, cur) => acc + cur.quantity, 0)}) items</h5>
                                     <h3 className="text-secondary">
-                                        ${bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0)}
+                                        ${roundNumbers(+itemsPrice)}
                                     </h3>
                                     <p>Shipping fees and taxes will be added at checkout</p>
                                     <button className="btn btn-primary my-2" onClick={checkOutHandler}>Check out</button>

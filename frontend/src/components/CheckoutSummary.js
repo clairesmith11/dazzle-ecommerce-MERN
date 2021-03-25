@@ -8,10 +8,14 @@ const CheckoutSummary = () => {
     const bag = useSelector(state => state.bag);
     const { bagItems } = bag;
 
+    const roundNumbers = (num) => {
+        return num.toFixed(2);
+    };
+
     const itemsPrice = bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0);
     const shippingPrice = itemsPrice < 200 ? 9.99 : 0;
-    const taxesPrice = +(itemsPrice * 0.07).toFixed(2);
-    const totalPrice = +(itemsPrice + shippingPrice + taxesPrice).toFixed(2);
+    const taxesPrice = roundNumbers((+itemsPrice * 0.07));
+    const totalPrice = roundNumbers((+itemsPrice + +shippingPrice + +taxesPrice));
 
     return (
         <Col md={5} className="bg-light p-4 ml-5">
@@ -21,11 +25,11 @@ const CheckoutSummary = () => {
             <hr />
             <div className="d-flex justify-content-between">
                 <p>Subtotal</p>
-                <p>${itemsPrice}</p>
+                <p>${roundNumbers(+itemsPrice)}</p>
             </div>
             <div className="d-flex justify-content-between">
                 <p>Taxes</p>
-                <p>${taxesPrice}</p>
+                <p>${roundNumbers(+taxesPrice)}</p>
             </div>
             <div className="d-flex justify-content-between">
                 <p>Shipping</p>
@@ -34,7 +38,7 @@ const CheckoutSummary = () => {
             <hr />
             <div className="d-flex justify-content-between">
                 <h5>Total</h5>
-                <h5><strong>${totalPrice}</strong></h5>
+                <h5><strong>${roundNumbers(+totalPrice)}</strong></h5>
             </div>
         </Col>
     );

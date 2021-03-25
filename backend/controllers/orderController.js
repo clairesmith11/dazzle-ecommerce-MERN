@@ -18,6 +18,21 @@ export const getOrderById = asyncHandler(async (req, res) => {
 
 });
 
+/////GET USER ORDERS BY USER ID/////
+//Protected route//
+export const getUserOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.user._id });
+
+    //Check whether the order was found for the supplied ID
+    if (orders) {
+        res.json(orders);
+    } else {
+        res.status(404);
+        throw new Error('Orders not found');
+    }
+
+});
+
 /////CREATE NEW Order/////
 //Protected route//
 export const createOrder = asyncHandler(async (req, res) => {

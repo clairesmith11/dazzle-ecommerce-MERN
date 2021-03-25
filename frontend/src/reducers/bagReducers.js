@@ -2,7 +2,8 @@ import {
     BAG_ADD_ITEM,
     BAG_REMOVE_ITEM,
     BAG_SAVE_SHIPPING_ADDRESS,
-    BAG_SAVE_PAYMENT_METHOD
+    BAG_SAVE_PAYMENT_METHOD,
+    BAG_RESET_ITEMS
 } from '../constants/bagConstants';
 
 export const bagReducer = (initialState = { bagItems: [], shippingAddress: {} }, action) => {
@@ -38,6 +39,12 @@ export const bagReducer = (initialState = { bagItems: [], shippingAddress: {} },
             return {
                 ...initialState,
                 paymentMethod: action.payload
+            };
+        case BAG_RESET_ITEMS:
+            return {
+                ...initialState,
+                bagItems: [],
+                shippingAddress: {}
             };
         default:
             return initialState;

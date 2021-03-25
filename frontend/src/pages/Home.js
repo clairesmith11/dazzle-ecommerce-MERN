@@ -7,7 +7,7 @@ import Product from '../components/Product';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
 
-const Home = (props) => {
+const Home = () => {
     const dispatch = useDispatch();
     const productList = useSelector(state => state.productList);
     const { loading, error, products } = productList;

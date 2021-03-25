@@ -22,7 +22,7 @@ const storedBag = localStorage.getItem('bagItems')
 
 const storedUser = localStorage.getItem('loggedInUser')
     ? JSON.parse(localStorage.getItem('loggedInUser'))
-    : [];
+    : null;
 
 const storedShippingAddress = localStorage.getItem('shippingAddress')
     ? JSON.parse(localStorage.getItem('shippingAddress'))

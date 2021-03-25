@@ -8,6 +8,7 @@ import {
     USER_REGISTER_FAILURE,
     USER_LOGOUT
 } from '../constants/userConstants';
+import { BAG_RESET_ITEMS } from '../constants/bagConstants';
 
 export const userLogin = (email, password) => async (dispatch, getState) => {
     try {
@@ -51,7 +52,7 @@ export const userRegister = (name, email, password) => async (dispatch, getState
             payload: data
         });
 
-        localStorage.setItem('loggedInUser', JSON.stringify(getState().newUser.user));
+        localStorage.setItem('loggedInUser', JSON.stringify(getState().newUser.newUser));
     } catch (error) {
         //Dispatch failure to end loading and set error state
         dispatch({
@@ -64,7 +65,11 @@ export const userRegister = (name, email, password) => async (dispatch, getState
 export const userLogout = () => (dispatch) => {
     localStorage.removeItem('loggedInUser');
     localStorage.removeItem('bagItems');
+    localStorage.removeItem('shippingAddress');
     dispatch({
         type: USER_LOGOUT
+    });
+    dispatch({
+        type: BAG_RESET_ITEMS
     });
 };
