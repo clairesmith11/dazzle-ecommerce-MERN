@@ -5,7 +5,11 @@ import {
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_FAILURE,
-    CLEAR_PRODUCT_DETAILS
+    CLEAR_PRODUCT_DETAILS,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_SUCCESS,
+    PRODUCT_CREATE_FAILURE,
+    CLEAR_PRODUCT_CREATE
 } from '../constants/productConstants';
 
 export const productListReducer = (initialState = { products: [] }, action) => {
@@ -31,6 +35,21 @@ export const productDetailsReducer = (initialState = { product: { reviews: [] } 
             return { loading: false, error: action.payload };
         case CLEAR_PRODUCT_DETAILS:
             return { loading: true, product: { reviews: [] } };
+        default:
+            return initialState;
+    }
+};
+
+export const productCreateReducer = (initialState = {}, action) => {
+    switch (action.type) {
+        case PRODUCT_CREATE_REQUEST:
+            return { loading: true };
+        case PRODUCT_CREATE_SUCCESS:
+            return { loading: false, success: true, product: action.payload };
+        case PRODUCT_CREATE_FAILURE:
+            return { loading: false, error: action.payload };
+        case CLEAR_PRODUCT_CREATE:
+            return {};
         default:
             return initialState;
     }

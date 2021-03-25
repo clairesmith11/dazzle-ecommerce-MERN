@@ -22,3 +22,12 @@ export const protectRoute = asyncHandler(async (req, res, next) => {
     }
     next();
 });
+
+export const isAdmin = (req, res, next) => {
+    if (req.user && req.user.isAdmin) {
+        next();
+    } else {
+        res.status(401);
+        throw new Error('You need administrator permission to access this');
+    }
+};

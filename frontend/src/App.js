@@ -13,6 +13,8 @@ import UserAccountPage from './pages/UserAccountPage';
 import PaymentPage from './pages/PaymentPage';
 import OrderPage from './pages/OrderPage';
 import CompletedOrderPage from './pages/CompletedOrderPage';
+import AdminProductsPage from './pages/AdminProductsPage';
+import AdminProductEditPage from './pages/AdminProductEditPage';
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
           <Route path="/payment" component={PaymentPage} />
           <Route path="/orders/:id" component={CompletedOrderPage} />
           <Route path="/order" component={OrderPage} />
+          <Route path="/admin/products" component={AdminProductsPage} />
+          <Route path="/admin/product/:id/edit" component={AdminProductEditPage} />
         </Container>
       </main>
       <Footer />

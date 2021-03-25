@@ -45,6 +45,7 @@ const products = [
         sale: false
     },
 
+
 ];
 
 export default products;

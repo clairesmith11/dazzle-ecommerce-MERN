@@ -10,7 +10,7 @@ export const getOrderById = asyncHandler(async (req, res) => {
 
     //Check whether the order was found for the supplied ID
     if (order) {
-        res.json(order);
+        res.status(200).json(order);
     } else {
         res.status(404);
         throw new Error('Order not found');
@@ -25,7 +25,7 @@ export const getUserOrders = asyncHandler(async (req, res) => {
 
     //Check whether the order was found for the supplied ID
     if (orders) {
-        res.json(orders);
+        res.status(200).json(orders);
     } else {
         res.status(404);
         throw new Error('Orders not found');
@@ -37,6 +37,31 @@ export const getUserOrders = asyncHandler(async (req, res) => {
 //Protected route//
 export const createOrder = asyncHandler(async (req, res) => {
     const newOrder = await Order.create(req.body);
+
+    res.status(201).json({ order: newOrder });
+});
+
+/////Update Order to paid/////
+//Protected route//
+export const updateOrderToPaid = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+        order.isPaid = true;
+        order.paidAt = Date.now();
+        order.paymentResult = {
+            id: req.body.id,
+            status: req.body.status,
+            updateTime: req.body.update_time,
+            email: req.body.payer.email_address
+        };
+
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
 
     res.status(201).json({ order: newOrder });
 });

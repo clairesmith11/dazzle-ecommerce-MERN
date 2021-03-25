@@ -26,6 +26,7 @@ export const loginUser = asyncHandler(async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        isAdmin: user.isAdmin,
         token: createToken(user._id)
     });
 });
@@ -51,6 +52,7 @@ export const registerNewUser = asyncHandler(async (req, res) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
+        idAdmin: newUser.isAdmin,
         token: createToken(newUser._id)
     });
 

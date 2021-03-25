@@ -7,7 +7,10 @@ import {
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_FAILURE,
-    CLEAR_PRODUCT_DETAILS
+    CLEAR_PRODUCT_DETAILS,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_SUCCESS,
+    PRODUCT_CREATE_FAILURE
 } from '../constants/productConstants';
 
 export const listProducts = () => async (dispatch) => {
@@ -52,4 +55,29 @@ export const listProductDetails = (id) => async (dispatch) => {
 
 export const clearProductDetails = () => async (dispatch) => {
     dispatch({ type: CLEAR_PRODUCT_DETAILS });
+};
+
+export const createProduct = () => async (dispatch, getState) => {
+    try {
+        //Dispatch request to set loading state and empty product object
+        dispatch({ type: PRODUCT_CREATE_REQUEST });
+        const userAuth = getState().user.user;
+        //Dispatch success to end loading and set product object contents
+        const { data } = await axios.post(`/api/products`, {}, {
+            headers: {
+                Authorization: `Bearer ${userAuth.token}`
+            }
+        });
+        dispatch({
+            type: PRODUCT_CREATE_SUCCESS,
+            payload: data
+        });
+
+    } catch (error) {
+        //Dispatch failure to end loading and set error state
+        dispatch({
+            type: PRODUCT_CREATE_FAILURE,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        });
+    }
 };

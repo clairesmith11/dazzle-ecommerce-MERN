@@ -12,7 +12,6 @@ export const createOrder = (order) => async (dispatch, getState) => {
         dispatch({ type: ORDER_CREATE_REQUEST });
         //Get user token
         const userAuth = getState().user.user;
-        console.log(userAuth.token);
         //Send request to backend for products data 
         const { data } = await axios.post(
             '/api/orders',

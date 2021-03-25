@@ -36,6 +36,16 @@ const Header = ({ history, location }) => {
                             <LinkContainer to="/bag">
                                 <Nav.Link><i className='fas fa-shopping-bag mr-1'></i>Bag</Nav.Link>
                             </LinkContainer>
+                            {user && user.isAdmin && (
+                                <NavDropdown title="Admin Panel">
+                                    <LinkContainer to="/admin/products">
+                                        <NavDropdown.Item>Products</NavDropdown.Item>
+                                    </LinkContainer>
+                                    <LinkContainer to="/admin/orders">
+                                        <NavDropdown.Item>Orders</NavDropdown.Item>
+                                    </LinkContainer>
+                                </NavDropdown>
+                            )}
                             {user ? (
                                 <NavDropdown title={user.name}>
                                     <LinkContainer to="/profile">

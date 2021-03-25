@@ -31,6 +31,11 @@ main {
   height: 60vh;
 }
 
+.form-container {
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
 @media (max-width: 800px) {
   .hide-small {
     display: none;

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Button, Card, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Form, ListGroup } from 'react-bootstrap';
 import axios from 'axios';
 
 import Message from '../components/Message';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const UserAccountPage = ({ history }) => {
     const userInfo = useSelector(state => state.user);
@@ -13,17 +14,32 @@ const UserAccountPage = ({ history }) => {
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [updatedPassword, setUpdatedPassword] = useState('');
     const [message, setMessage] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [userOrders, setUserOrders] = useState(null);
 
     useEffect(() => {
+        //If no user is logged in, redirect to sign in page
         if (!user) {
             history.push('/login');
         } else {
-            const fetchUserOrders = async() => {
-                
-            }
-            fetchUserOrders()
+            setLoading(true);
+            const fetchUserOrders = async () => {
+                try {
+                    const { data } = await axios.get('/api/orders/my-orders', {
+                        headers:
+                            { Authorization: `Bearer ${user.token}` }
+                    });
+                    setUserOrders(data);
+                    setLoading(false);
+                } catch (err) {
+                    setError(err.response.data.message);
+                }
+
+            };
+            fetchUserOrders();
         }
-    }, []);
+    }, [history, user]);
 
     const toggleForm = (formType) => {
         if (formType === 'password') {
@@ -118,8 +134,25 @@ const UserAccountPage = ({ history }) => {
                     <Col md={8}>
                         <h5>My Orders</h5>
                         <Card className="my-3">
-                            <Card.Body>
-                            </Card.Body>
+                            {loading ?
+                                <LoadingSpinner /> :
+                                !error && userOrders ?
+                                    <Card.Body>
+                                        <ListGroup>
+                                            {userOrders.map(order => {
+                                                return (
+                                                    <ListGroup.Item key={order._id}>
+                                                        <p><strong>Order number: </strong><Link to={`/orders/${order._id}`}>{order._id}</Link></p>
+                                                        <p><strong>Order date: </strong>{order.createdAt.split('T')[0]}</p>
+                                                    </ListGroup.Item>
+                                                );
+                                            })}
+                                        </ListGroup>
+                                    </Card.Body>
+                                    : !error && !userOrders ?
+                                        <p>You have not made any orders yet</p>
+                                        : <Message type="warning" message={error} />
+                            }
                         </Card>
                     </Col>
                 </Row>
