@@ -39,7 +39,7 @@ const Rating = ({ rating, numReviews }) => {
                         ? "fas fa-star-half-alt"
                         : "far fa-star"
             }></i>
-            <p className="mx-3">({numReviews} reviews)</p>
+            {numReviews && <p className="mx-3">({numReviews} reviews)</p>}
         </div>
     );
 };

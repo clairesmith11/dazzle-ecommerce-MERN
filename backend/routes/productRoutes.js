@@ -11,9 +11,13 @@ router.route('/')
     .get(productController.getAllProducts)
     .post(authMiddleware.protectRoute, authMiddleware.isAdmin, productController.createProduct);
 
+router.post('/:id/reviews', authMiddleware.protectRoute, productController.createReview);
+
 router.route('/:id')
     .get(productController.getProductById)
     .patch(authMiddleware.protectRoute, authMiddleware.isAdmin, productController.editProduct)
     .delete(authMiddleware.protectRoute, authMiddleware.isAdmin, productController.deleteProduct);
+
+
 
 export default router;

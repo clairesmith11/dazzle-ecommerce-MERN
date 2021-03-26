@@ -81,3 +81,34 @@ export const deleteProduct = asyncHandler(async (req, res) => {
         message: 'Item deleted'
     });
 });
+
+/////CREATE NEW REVIEW/////
+//Protected route//
+export const createReview = asyncHandler(async (req, res) => {
+    const { rating, comment } = req.body;
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+        console.log(product.name);
+        const submittedReview = product.reviews.find(review => review.user.toString() === req.user._id.toString());
+        if (submittedReview) {
+            res.status(400);
+            throw new Error('You have already submitted a review for this product');
+        }
+        const review = {
+            name: req.user.name,
+            rating: +rating,
+            comment,
+            user: req.user._id
+        };
+        product.reviews.push(review);
+        product.numReviews = product.reviews.length;
+        product.rating = product.reviews.reduce((acc, cur) => cur.rating + acc, 0) / product.reviews.length;
+        await product.save();
+        res.status(201).json({ message: 'Review added' });
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+
+});

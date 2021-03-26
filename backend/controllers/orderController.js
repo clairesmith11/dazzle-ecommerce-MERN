@@ -48,7 +48,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 });
 
 /////Update Order to paid/////
-//Protected route//
+//Admin only//
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
 
@@ -69,5 +69,22 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
         throw new Error('Order not found');
     }
 
-    res.status(201).json({ order: newOrder });
+});
+
+/////Update Order to shipped/////
+//Admin only//
+export const updateOrderToShipped = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+        order.isShipped = true;
+        order.shippedAt = Date.now();
+
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+
 });

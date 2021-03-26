@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, ListGroup } from 'react-bootstrap';
+import { Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
@@ -12,6 +12,7 @@ const CompletedOrderPage = ({ match }) => {
     const [orderData, setOrderData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [isShipped, setIsShipped] = useState(false);
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -23,9 +24,9 @@ const CompletedOrderPage = ({ match }) => {
                         { Authorization: `Bearer ${user.token}` }
                 });
                 setOrderData(data);
-
+                setIsShipped(data.isShipped);
                 //Check if signed in user is the same as the user who placed this order
-                if (data.user !== user.id && !user.isAdmin) {
+                if (data.user._id !== user.id && !user.isAdmin) {
                     setError('Not authorized');
                 }
                 setLoading(false);
@@ -39,6 +40,20 @@ const CompletedOrderPage = ({ match }) => {
         fetchOrder();
 
     }, [match, user]);
+
+    const updateToShippedHandler = () => {
+        try {
+            axios.patch(`/api/orders/${match.params.id}/shipped`, {}, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            });
+            setIsShipped(true);
+        } catch (err) {
+            console.error(err);
+        }
+
+    };
 
     return (
         <div>
@@ -73,10 +88,11 @@ const CompletedOrderPage = ({ match }) => {
 
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
                                     <p className="m-0 d-flex"><strong>Shipping Status: </strong>
-                                        {orderData.isShipped
-                                            ? <p className="text-success mx-1">Order has shipped!</p>
+                                        {isShipped
+                                            ? <p className="text-success mx-1">Order shipped on {orderData.shippedAt.substring(0, 10)}</p>
                                             : <p className="text-danger mx-1">Preparing your order</p>}
                                     </p>
+                                    {user.isAdmin && <Button disabled={isShipped} className="btn-sm" onClick={updateToShippedHandler} variant="secondary">Update to shipped</Button>}
                                 </ListGroup.Item>
                             </ListGroup>
                         </Col>
