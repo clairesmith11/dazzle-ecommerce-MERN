@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import { listProducts, createProduct } from '../actions/productActions';
-import { CLEAR_PRODUCT_CREATE, CLEAR_PRODUCT_DETAILS } from '../constants/productConstants';
+import { CLEAR_PRODUCT_CREATE } from '../constants/productConstants';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
 

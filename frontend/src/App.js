@@ -15,6 +15,7 @@ import OrderPage from './pages/OrderPage';
 import CompletedOrderPage from './pages/CompletedOrderPage';
 import AdminProductsPage from './pages/AdminProductsPage';
 import AdminProductEditPage from './pages/AdminProductEditPage';
+import AdminOrdersPage from './pages/AdminOrdersPage';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/orders/:id" component={CompletedOrderPage} />
           <Route path="/order" component={OrderPage} />
           <Route path="/admin/products" component={AdminProductsPage} />
+          <Route path="/admin/orders" component={AdminOrdersPage} />
           <Route path="/admin/product/:id/edit" component={AdminProductEditPage} />
         </Container>
       </main>

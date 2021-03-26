@@ -2,11 +2,17 @@ import asyncHandler from 'express-async-handler';
 
 import Order from '../models/orderModel.js';
 
+/////GET ALL ORDERS/////
+//Admins only//
+export const getAllOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({}).populate('user', 'id name');
+    res.json(orders);
+});
 
 /////GET SINGLE ORDER BY ID/////
 //Protected route//
 export const getOrderById = asyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('user', 'id name');
 
     //Check whether the order was found for the supplied ID
     if (order) {

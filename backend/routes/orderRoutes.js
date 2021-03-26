@@ -5,7 +5,9 @@ import * as authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', authMiddleware.protectRoute, orderController.createOrder);
+router.route('/')
+    .get(authMiddleware.protectRoute, authMiddleware.isAdmin, orderController.getAllOrders)
+    .post(authMiddleware.protectRoute, orderController.createOrder);
 router.get('/my-orders', authMiddleware.protectRoute, orderController.getUserOrders);
 router.get('/:id', authMiddleware.protectRoute, orderController.getOrderById);
 router.patch('/:id/pay', authMiddleware.protectRoute, orderController.updateOrderToPaid);

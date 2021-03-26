@@ -25,13 +25,13 @@ const CompletedOrderPage = ({ match }) => {
                 setOrderData(data);
 
                 //Check if signed in user is the same as the user who placed this order
-                if (data.user !== user.id) {
+                if (data.user !== user.id && !user.isAdmin) {
                     setError('Not authorized');
                 }
                 setLoading(false);
             } catch (err) {
                 setLoading(false);
-                setError(err.response.data.message);
+                console.error(err);
             }
 
         };
@@ -50,7 +50,7 @@ const CompletedOrderPage = ({ match }) => {
                             <ListGroup>
                                 <h5 className="my-3">Shipping Details</h5>
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0"><strong>Name: </strong>{user.name}</p>
+                                    <p className="m-0"><strong>Name: </strong>{orderData.user.name}</p>
                                 </ListGroup.Item>
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
                                     <p className="m-0"><strong>Shipping to: </strong><br />
@@ -62,11 +62,20 @@ const CompletedOrderPage = ({ match }) => {
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
                                     <p className="m-0"><strong>Payment Method: </strong>{orderData.paymentMethod}</p>
                                 </ListGroup.Item>
+
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0 d-flex"><strong>Status: </strong>
+                                    <p className="m-0 d-flex"><strong>Payment Status: </strong>
+                                        {orderData.isPaid
+                                            ? <p className="text-success mx-1">Payment received!</p>
+                                            : <p className="text-danger mx-1">Awaiting payment</p>}
+                                    </p>
+                                </ListGroup.Item>
+
+                                <ListGroup.Item className="d-flex justify-content-between align-items-center">
+                                    <p className="m-0 d-flex"><strong>Shipping Status: </strong>
                                         {orderData.isShipped
-                                            ? <p className="text-success mx-1">Your order has shipped!</p>
-                                            : <p className="text-danger mx-1">We are still preparing your order</p>}
+                                            ? <p className="text-success mx-1">Order has shipped!</p>
+                                            : <p className="text-danger mx-1">Preparing your order</p>}
                                     </p>
                                 </ListGroup.Item>
                             </ListGroup>
@@ -74,7 +83,7 @@ const CompletedOrderPage = ({ match }) => {
                         <Col md={6}>
                             <ListGroup>
                                 <h5 className="my-3">Order Items</h5>
-                                {orderData.products.map(product => {
+                                {orderData.products && orderData.products.map(product => {
                                     return (
 
                                         <ListGroup.Item key={product._id} className="d-flex justify-content-between align-items-center">
