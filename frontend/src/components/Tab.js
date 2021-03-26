@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs, Form, Button } from 'react-bootstrap';
 
 import Rating from './Rating';
+import Review from './Review';
 
 const Tab = ({ product }) => {
     return (
@@ -24,25 +25,7 @@ const Tab = ({ product }) => {
 
                             );
                         })}
-                    <Form>
-                        <p className="mt-5"><strong>Submit a Review</strong></p>
-                        <Form.Group>
-                            <Form.Label>Rating</Form.Label>
-                            <Form.Control
-                                type="number"
-                                placeholder="Enter your rating"
-                                min={0}
-                                max={5} />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Comment</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={2}
-                                placeholder="Enter your review" />
-                        </Form.Group>
-                        <Button type="submit">Submit</Button>
-                    </Form>
+                    <Review product={product._id} />
                 </Tab>
             </Tabs>
         </div>
