@@ -36,6 +36,22 @@ main {
   margin: 2rem auto;
 }
 
+.carousel {
+  max-height: 75vh;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 60% !important;
+  color: #fff !important;
+}
+
+.carousel-caption h3 {
+  color: #fff !important;
+}
+
 @media (max-width: 800px) {
   .hide-small {
     display: none;

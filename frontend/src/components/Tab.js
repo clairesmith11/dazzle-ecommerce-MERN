@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Form, Button } from 'react-bootstrap';
+import { Tabs } from 'react-bootstrap';
 
 import Rating from './Rating';
 import Review from './Review';

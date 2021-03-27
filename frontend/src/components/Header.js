@@ -1,10 +1,12 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 
 import { userLogout } from '../actions/userActions';
+import SearchBar from '../components/SearchBar';
 
 const Header = ({ history, location }) => {
     const dispatch = useDispatch();
@@ -18,17 +20,14 @@ const Header = ({ history, location }) => {
 
     return (
         <header>
-            <Navbar bg="light" variant="light" expand="lg">
+            <Navbar className="navbar" bg="light" variant="light" expand="lg">
                 <Container>
                     <LinkContainer to="/">
                         <Navbar.Brand>Dazzle</Navbar.Brand>
                     </LinkContainer>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Form inline>
-                            <FormControl type="text" placeholder="Search" className="ml-sm-2" />
-                            <Button variant="outline-success"><i className="fas fa-search"></i></Button>
-                        </Form>
+                        <Route render={({ history }) => <SearchBar history={history} />} />
                         <Nav className="ml-auto">
                             <LinkContainer to="/wishlist">
                                 <Nav.Link><i className='fas fa-heart mr-1'></i>Wishlist</Nav.Link>

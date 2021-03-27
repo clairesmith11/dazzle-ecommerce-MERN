@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 import Message from './Message';
 import LoadingSpinner from './LoadingSpinner';
+import { listProductDetails } from '../actions/productActions';
 
 const Review = ({ product }) => {
+    const dispatch = useDispatch();
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
     const [rating, setRating] = useState(0);
@@ -14,11 +16,11 @@ const Review = ({ product }) => {
     const [loading, setLoading] = useState('');
     const [message, setMessage] = useState(null);
 
-    const submitReviewHandler = (e) => {
+    const submitReviewHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const { data } = axios.post(`/api/products/${product}/reviews`, {
+            await axios.post(`/api/products/${product}/reviews`, {
                 rating,
                 comment
             }, {
@@ -29,8 +31,9 @@ const Review = ({ product }) => {
             });
             setLoading(false);
             setMessage('Your review has been submitted!');
+            dispatch(listProductDetails(product));
         } catch (err) {
-            console.error(err);
+            setMessage(err);
             setLoading(false);
         }
 

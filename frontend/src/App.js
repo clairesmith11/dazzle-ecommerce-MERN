@@ -21,9 +21,12 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <main className="py-3">
+      <main className="pb-3">
+        <Route path="/" component={Home} exact />
+        <Route path="/search/:keyword" component={Home} exact />
+        <Route path="/page/:pageNumber" component={Home} />
         <Container>
-          <Route path="/" component={Home} exact />
+          <Route path="/search/:keyword/page/:pageNumber" component={Home} />
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/bag/:id?" component={BagPage} />
           <Route path="/checkout" component={CheckoutPage} />
@@ -32,7 +35,8 @@ const App = () => {
           <Route path="/payment" component={PaymentPage} />
           <Route path="/orders/:id" component={CompletedOrderPage} />
           <Route path="/order" component={OrderPage} />
-          <Route path="/admin/products" component={AdminProductsPage} />
+          <Route path="/admin/products" component={AdminProductsPage} exact />
+          <Route path="/admin/products/:pageNumber" component={AdminProductsPage} exact />
           <Route path="/admin/orders" component={AdminOrdersPage} />
           <Route path="/admin/product/:id/edit" component={AdminProductEditPage} />
         </Container>

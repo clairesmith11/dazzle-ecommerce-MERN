@@ -7,17 +7,24 @@ import { listProducts, createProduct } from '../actions/productActions';
 import { CLEAR_PRODUCT_CREATE } from '../constants/productConstants';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 
-const AdminProductsPage = ({ history }) => {
+const AdminProductsPage = ({ history, match }) => {
     const dispatch = useDispatch();
+
     const productList = useSelector(state => state.productList);
     const productCreate = useSelector(state => state.productCreate);
-    const { loading, error, products } = productList;
+
+    const { loading, error, products, page, pages } = productList;
     const { loading: loadingCreate, error: errorCreate, success: successfulCreate, product: createdProduct } = productCreate;
+
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
+
     const [successfulDelete, setSuccessfulDelete] = useState(false);
     const [errorDelete, setErrorDelete] = useState(null);
+
+    const pageNumber = match.params.pageNumber || 1;
 
     useEffect(() => {
         dispatch({ type: CLEAR_PRODUCT_CREATE });
@@ -29,10 +36,10 @@ const AdminProductsPage = ({ history }) => {
         if (successfulCreate) {
             history.push(`/admin/product/${createdProduct.product._id}/edit`);
         } else {
-            dispatch(listProducts());
+            dispatch(listProducts('', pageNumber));
         }
 
-    }, [dispatch, successfulDelete, successfulCreate, createdProduct, history, user]);
+    }, [dispatch, successfulDelete, successfulCreate, createdProduct, history, user, pageNumber]);
 
     const createProductHandler = () => {
         dispatch(createProduct());
@@ -98,6 +105,7 @@ const AdminProductsPage = ({ history }) => {
                         })}
                 </tbody>
             </Table>
+            <Paginate pages={pages} page={page} isAdmin={true} />
         </div>
     );
 };
