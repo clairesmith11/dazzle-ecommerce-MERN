@@ -13,16 +13,20 @@ import {
     PRODUCT_CREATE_FAILURE
 } from '../constants/productConstants';
 
-export const listProducts = (keyword = '', pageNumber = '') => async (dispatch) => {
+export const listProducts = (keyword = '', pageNumber = '', category = '') => async (dispatch) => {
     try {
         //Dispatch request to set loading state and empty products array
         dispatch({ type: PRODUCT_LIST_REQUEST });
         //Send request to backend for products data 
-        const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
+        let response;
+        if (category) {
+            response = await axios.get(`/api/products/collections?category=${category}&pageNumber=${pageNumber}`);
+        } else response = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
+
         //Dispatch success to end loading and set products array contents
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
-            payload: data
+            payload: response.data
         });
     } catch (error) {
         //Dispatch failure to end loading and set error state

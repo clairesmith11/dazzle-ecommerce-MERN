@@ -22,6 +22,19 @@ export const getAllProducts = asyncHandler(async (req, res) => {
     res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
+/////GET PRODUCTS BY CATEGORY/////
+//All users: No authentication//
+export const getProductsByCategory = asyncHandler(async (req, res) => {
+    const cat = req.query.category ? req.query.category : {};
+    const pageSize = 8;
+    const page = +req.query.pageNumber || 1;
+
+    const count = await Product.countDocuments({ category: cat });
+    const products = await Product.find({ category: cat }).limit(pageSize).skip(pageSize * (page - 1));
+
+    res.json({ products, page, pages: Math.ceil(count / pageSize) });
+});
+
 /////GET SINGLE PRODUCT BY ID/////
 //All users: No authentication//
 export const getProductById = asyncHandler(async (req, res) => {

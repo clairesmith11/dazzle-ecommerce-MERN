@@ -24,9 +24,11 @@ const App = () => {
       <main className="pb-3">
         <Route path="/" component={Home} exact />
         <Route path="/search/:keyword" component={Home} exact />
+        <Route path="/collections/:cat" component={Home} exact />
+        <Route path="/search/:keyword/page/:pageNumber" component={Home} exact />
+        <Route path="/collections/:cat/page/:pageNumber" component={Home} exact />
         <Route path="/page/:pageNumber" component={Home} />
         <Container>
-          <Route path="/search/:keyword/page/:pageNumber" component={Home} />
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/bag/:id?" component={BagPage} />
           <Route path="/checkout" component={CheckoutPage} />
