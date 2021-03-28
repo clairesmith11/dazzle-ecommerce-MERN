@@ -6,6 +6,7 @@ import { productListReducer, productDetailsReducer, productCreateReducer } from 
 import { bagReducer } from './reducers/bagReducers';
 import { userLoginReducer, userRegisterReducer } from './reducers/userReducers';
 import { orderCreateReducer, orderListReducer } from './reducers/orderReducers';
+import { wishlistReducer } from './reducers/wishlistReducers';
 
 const reducer = combineReducers({
     productList: productListReducer,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
     user: userLoginReducer,
     newUser: userRegisterReducer,
     order: orderCreateReducer,
-    orderList: orderListReducer
+    orderList: orderListReducer,
+    wishlist: wishlistReducer
 });
 
 const storedBag = localStorage.getItem('bagItems')
@@ -33,7 +35,7 @@ const storedShippingAddress = localStorage.getItem('shippingAddress')
 
 const initialState = {
     bag: { bagItems: storedBag, shippingAddress: storedShippingAddress },
-    user: { user: storedUser },
+    user: { user: storedUser }
 };
 
 const middleware = [thunk];

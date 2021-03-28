@@ -27,13 +27,13 @@ const Home = ({ match }) => {
         <div>
             <BannerCarousel />
             <Container>
-                <div className="d-flex justify-content-around my-5">
-                    <LinkContainer to={`/`}><Button>All Collections</Button></LinkContainer>
-                    <LinkContainer to={`/collections/rings`}><Button>Rings</Button></LinkContainer>
-                    <LinkContainer to={`/collections/necklaces`}><Button>Necklaces</Button></LinkContainer>
-                    <LinkContainer to={`/collections/bracelets`}><Button>Bracelets</Button></LinkContainer>
-                    <LinkContainer to={`/collections/watches`}><Button>Watches</Button></LinkContainer>
-                </div>
+                <Row className="d-flex justify-content-around my-5">
+                    <LinkContainer to={`/`}><Button className="my-1">All Collections</Button></LinkContainer>
+                    <LinkContainer to={`/collections/rings`}><Button className="my-1">Rings</Button></LinkContainer>
+                    <LinkContainer to={`/collections/necklaces`}><Button className="my-1">Necklaces</Button></LinkContainer>
+                    <LinkContainer to={`/collections/bracelets`}><Button className="my-1">Bracelets</Button></LinkContainer>
+                    <LinkContainer to={`/collections/watches`}><Button className="my-1">Watches</Button></LinkContainer>
+                </Row>
                 <h1>Latest Products</h1>
                 {loading ? <LoadingSpinner size="large" /> : error ? <Message message={error} type="danger" heading="Error" /> :
                     <React.Fragment>

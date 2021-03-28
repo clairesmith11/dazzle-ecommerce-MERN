@@ -6,6 +6,7 @@ import StateSelector from '../components/StateSelector';
 import CheckoutSummary from '../components/CheckoutSummary';
 import { saveShippingAddress } from '../actions/bagActions';
 import Breadcrumbs from '../components/Breadcrumbs';
+import Message from '../components/Message';
 
 const CheckoutPage = ({ history }) => {
     const bag = useSelector(state => state.bag);
@@ -15,13 +16,19 @@ const CheckoutPage = ({ history }) => {
     const [city, setCity] = useState(shippingAddress.city);
     const [usState, setUsState] = useState(shippingAddress.usState);
     const [zipCode, setZipCode] = useState(shippingAddress.zipCode);
+    const [message, setMessage] = useState(null);
 
     const dispatch = useDispatch();
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(saveShippingAddress({ address, city, usState, zipCode }));
-        history.push('/payment');
+        if (address && city && usState && zipCode) {
+            dispatch(saveShippingAddress({ address, city, usState, zipCode }));
+            history.push('/payment');
+        } else {
+            setMessage('You must fill out all fields to continue.');
+        }
+
     };
 
     return (
@@ -33,6 +40,7 @@ const CheckoutPage = ({ history }) => {
                         <Breadcrumbs page='info' />
                     </div>
                     <h5>Shipping address</h5>
+                    {message && <Message type="danger" message={message} />}
                     <Form className="my-3" onSubmit={submitHandler}>
                         <Form.Group>
                             <Form.Label>Address</Form.Label>
@@ -59,7 +67,7 @@ const CheckoutPage = ({ history }) => {
                                 <Form.Label>Zip code</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Enter zip code"
+                                    placeholder="Enter zip"
                                     value={zipCode}
                                     onChange={(e) => setZipCode(e.target.value)} />
                             </Form.Group>

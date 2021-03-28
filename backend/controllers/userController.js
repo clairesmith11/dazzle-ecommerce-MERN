@@ -1,8 +1,9 @@
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
+import Product from '../models/productModel.js';
 import { createToken } from '../utils/token.js';
-import expressAsyncHandler from 'express-async-handler';
+
 
 /////LOGIN EXISTING USERS/////
 //All users: No authentication//
@@ -27,6 +28,7 @@ export const loginUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
+        wishlist: user.wishlist,
         token: createToken(user._id)
     });
 });
@@ -52,7 +54,8 @@ export const registerNewUser = asyncHandler(async (req, res) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        idAdmin: newUser.isAdmin,
+        isAdmin: newUser.isAdmin,
+        wishlist: newUser.wishlist,
         token: createToken(newUser._id)
     });
 
@@ -86,4 +89,45 @@ export const updateUser = asyncHandler(async (req, res) => {
         email: updatedUser.email,
         token: createToken(updatedUser._id)
     });
+});
+
+export const getUserWishlist = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    } else {
+        res.json(user.wishlist);
+    }
+});
+
+/////ADD ITEM TO USER WISHLIST/////
+//Protected route//
+//api/user/:productId/wishlist
+export const addItemToWishlist = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    const product = await Product.findById(req.params.productId);
+
+    if (product) {
+        const wishlistedProduct = user.wishlist.find(item => item.toString() === req.params.productId.toString());
+        if (wishlistedProduct) {
+            res.status(400);
+            throw new Error('You have already added this product to your list');
+        }
+        const newWishlistItem = {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.image
+        };
+
+        user.wishlist.push(newWishlistItem);
+        await user.save();
+        res.status(201).json(newWishlistItem);
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+
 });

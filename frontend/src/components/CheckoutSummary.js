@@ -18,7 +18,7 @@ const CheckoutSummary = () => {
     const totalPrice = roundNumbers((+itemsPrice + +shippingPrice + +taxesPrice));
 
     return (
-        <Col md={5} className="bg-light p-4 ml-5">
+        <Col md={5} className="checkout-summary bg-light p-4 ml-5">
             <div>
                 {bagItems.map(item => <CheckoutItem item={item} key={item.product} />)}
             </div>

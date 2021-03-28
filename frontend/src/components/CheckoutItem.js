@@ -8,7 +8,7 @@ const CheckoutItem = ({ item }) => {
                 <Image style={{ width: '120px' }} src={item.image} thumbnail />
                 <span className="badge badge-secondary badge-pill">{item.quantity}</span>
             </div>
-            <p>{item.name}</p>
+            <p className="mx-2">{item.name}</p>
             <p>${(item.price * item.quantity).toFixed(2)}</p>
         </div>
     );

@@ -22,6 +22,7 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    wishlist: []
 });
 
 userSchema.pre('save', async function (next) {

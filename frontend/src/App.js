@@ -16,6 +16,7 @@ import CompletedOrderPage from './pages/CompletedOrderPage';
 import AdminProductsPage from './pages/AdminProductsPage';
 import AdminProductEditPage from './pages/AdminProductEditPage';
 import AdminOrdersPage from './pages/AdminOrdersPage';
+import WishlistPage from './pages/WishlistPage';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Container>
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/bag/:id?" component={BagPage} />
+          <Route path="/wishlist" component={WishlistPage} />
           <Route path="/checkout" component={CheckoutPage} />
           <Route path='/login' component={SignInPage} />
           <Route path="/profile" component={UserAccountPage} />

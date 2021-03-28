@@ -15,7 +15,7 @@ main {
 
 .badge-pill {
   position: absolute;
-  left: 100px;
+  left: 25%;
   top: -2px;
 }
 
@@ -52,9 +52,12 @@ main {
   color: #fff !important;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .hide-small {
     display: none;
+  }
+  h2 {
+    font-size: 1.4rem;
   }
   h3 {
     font-size: 1.3rem;
@@ -67,5 +70,33 @@ main {
   }
   p {
     font-size: 0.8rem;
+  }
+  .carousel-caption {
+    position: absolute;
+    bottom: 40% !important;
+    color: #fff !important;
+  }
+  .breadcrumb li {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 750px) {
+  .checkout-summary {
+    margin: 0 auto !important;
+  }
+  .badge-pill {
+    left: 20%;
+  }
+}
+
+@media (max-width: 500px) {
+  .carousel-caption {
+    position: absolute;
+    bottom: 20% !important;
+    color: #fff !important;
+  }
+  .badge-pill {
+    left: 90px;
   }
 }

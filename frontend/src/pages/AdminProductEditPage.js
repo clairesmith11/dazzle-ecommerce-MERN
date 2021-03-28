@@ -96,7 +96,7 @@ const AdminProductEditPage = ({ match, history }) => {
 
     return (
         <div>
-            <h2>Edit product</h2>
+            <h2 className="my-3">Edit product</h2>
             <Link to="/admin/products" className="btn btn-outline-primary my-3">Go back</Link>
             {loading ? <LoadingSpinner /> :
                 <Form className="form-container" onSubmit={submitHandler}>

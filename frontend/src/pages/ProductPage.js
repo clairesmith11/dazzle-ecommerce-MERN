@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Image } from 'react-bootstrap';
+import axios from 'axios';
 
 import Rating from '../components/Rating';
 import Tab from '../components/Tab';
@@ -9,25 +10,43 @@ import QuantityButton from '../components/QuantityButton';
 import { listProductDetails, clearProductDetails } from '../actions/productActions';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
+import { addItemToWishlist } from '../actions/wishlistActions';
 
 const ProductPage = ({ history, match }) => {
+    const productId = match.params.id;
     const dispatch = useDispatch();
     const productList = useSelector(state => state.productDetails);
     const { loading, error, product } = productList;
+    const userInfo = useSelector(state => state.user);
+    const { user } = userInfo;
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [quantitySelected, setQuantitySelected] = useState(1);
+    const [loadingWishlist, setLoadingWishlist] = useState(false);
 
     useEffect(() => {
-        dispatch(listProductDetails(match.params.id));
+        dispatch(listProductDetails(productId));
 
         return () => {
             dispatch(clearProductDetails());
         };
 
-    }, [dispatch, match]);
+    }, [dispatch, productId]);
 
-    const toggleWishlist = () => {
-        setIsWishlisted(!isWishlisted);
+    const addToWishListHandler = async () => {
+        setLoadingWishlist(true);
+        try {
+            await axios.post(`/api/users/${productId}/wishlist`, {}, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            });
+            setIsWishlisted(!isWishlisted);
+            setLoadingWishlist(false);
+        } catch (err) {
+            console.error(err);
+            setLoadingWishlist(false);
+        }
+
     };
 
     const addQuantity = () => {
@@ -88,13 +107,15 @@ const ProductPage = ({ history, match }) => {
                             <button
                                 type="button"
                                 className="btn btn-outline-primary py-0 mx-1"
-                                onClick={toggleWishlist}
+                                onClick={addToWishListHandler}
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}>
-                                {isWishlisted
-                                    ? <i className="fas fa-heart"></i>
-                                    : <i className="far fa-heart"></i>}
+                                {loadingWishlist
+                                    ? <LoadingSpinner />
+                                    : isWishlisted
+                                        ? <i className="fas fa-heart"></i>
+                                        : <i className="far fa-heart"></i>}
                             </button>
                         </div>
                         <p>Availability: {product.inStock > 0
