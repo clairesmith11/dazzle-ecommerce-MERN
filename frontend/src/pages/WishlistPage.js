@@ -30,12 +30,6 @@ const WishlistPage = () => {
                         :
                         (<div className="my-4">
                             <table className="table">
-                                <thead>
-                                    <tr className="table-secondary">
-                                        <th scope="col">Image</th>
-                                        <th scope="col" className="details-label">Details</th>
-                                    </tr>
-                                </thead>
                                 <tbody>
                                     {wishlistItems.map(item => <WishlistItem item={item} key={item._id} />)}
                                 </tbody>

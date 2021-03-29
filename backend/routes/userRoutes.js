@@ -13,6 +13,8 @@ router.route('/profile')
     .patch(authMiddleware.protectRoute, userController.updateUser);
 
 router.get('/wishlist', authMiddleware.protectRoute, userController.getUserWishlist);
-router.post('/:productId/wishlist', authMiddleware.protectRoute, userController.addItemToWishlist);
+router.route('/:productId/wishlist')
+    .post(authMiddleware.protectRoute, userController.addItemToWishlist)
+    .delete(authMiddleware.protectRoute, userController.deleteProductFromWishlist);
 
 export default router;

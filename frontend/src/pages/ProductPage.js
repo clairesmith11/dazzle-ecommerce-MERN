@@ -10,15 +10,21 @@ import QuantityButton from '../components/QuantityButton';
 import { listProductDetails, clearProductDetails } from '../actions/productActions';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
-import { addItemToWishlist } from '../actions/wishlistActions';
+import { getUserWishlist } from '../actions/wishlistActions';
 
 const ProductPage = ({ history, match }) => {
     const productId = match.params.id;
     const dispatch = useDispatch();
+
     const productList = useSelector(state => state.productDetails);
     const { loading, error, product } = productList;
+
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
+
+    const wishlist = useSelector(state => state.wishlist);
+    const { wishlistItems } = wishlist;
+
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [quantitySelected, setQuantitySelected] = useState(1);
     const [loadingWishlist, setLoadingWishlist] = useState(false);
@@ -26,25 +32,46 @@ const ProductPage = ({ history, match }) => {
     useEffect(() => {
         dispatch(listProductDetails(productId));
 
+        const isOnWishlist = wishlistItems ? wishlistItems.filter(item => item._id === productId) : [];
+        if (isOnWishlist.length === 1) {
+            setIsWishlisted(true);
+        } else {
+            setIsWishlisted(false);
+        }
+
         return () => {
             dispatch(clearProductDetails());
         };
 
-    }, [dispatch, productId]);
+    }, [dispatch, productId, wishlistItems]);
 
-    const addToWishListHandler = async () => {
-        setLoadingWishlist(true);
-        try {
-            await axios.post(`/api/users/${productId}/wishlist`, {}, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                }
-            });
-            setIsWishlisted(!isWishlisted);
-            setLoadingWishlist(false);
-        } catch (err) {
-            console.error(err);
-            setLoadingWishlist(false);
+    const wishListHandler = async () => {
+        if (!isWishlisted) {
+            setLoadingWishlist(true);
+            try {
+                await axios.post(`/api/users/${productId}/wishlist`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                });
+                setIsWishlisted(true);
+                setLoadingWishlist(false);
+                dispatch(getUserWishlist());
+            } catch (err) {
+                console.error(err);
+                setLoadingWishlist(false);
+            }
+        } else {
+            try {
+                await axios.delete(`/api/users/${productId}/wishlist`, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                });
+                dispatch(getUserWishlist());
+            } catch (err) {
+                console.error(err);
+            }
         }
 
     };
@@ -107,7 +134,7 @@ const ProductPage = ({ history, match }) => {
                             <button
                                 type="button"
                                 className="btn btn-outline-primary py-0 mx-1"
-                                onClick={addToWishListHandler}
+                                onClick={wishListHandler}
                                 data-toggle="tooltip"
                                 data-placement="bottom"
                                 title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}>

@@ -110,7 +110,7 @@ export const addItemToWishlist = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.productId);
 
     if (product) {
-        const wishlistedProduct = user.wishlist.find(item => item.toString() === req.params.productId.toString());
+        const wishlistedProduct = user.wishlist.find(item => item._id.toString() === req.params.productId.toString());
         if (wishlistedProduct) {
             res.status(400);
             throw new Error('You have already added this product to your list');
@@ -130,4 +130,17 @@ export const addItemToWishlist = asyncHandler(async (req, res) => {
         throw new Error('Product not found');
     }
 
+});
+
+/////DELETE EXISTING PRODUCT/////
+//Admin users only//
+export const deleteProductFromWishlist = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    user.wishlist = user.wishlist.filter(item => item._id.toString() !== req.params.productId.toString());
+    console.log(req.params.productId);
+    user.save();
+    res.json({
+        message: 'Item deleted'
+    });
 });
