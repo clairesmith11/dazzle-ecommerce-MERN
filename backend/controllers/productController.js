@@ -8,14 +8,14 @@ import Product from '../models/productModel.js';
 export const getAllProducts = asyncHandler(async (req, res) => {
     const pageSize = 8;
     const page = +req.query.pageNumber || 1;
-
+    // Check for keyword search term and allow for partial word match
     const keyword = req.query.keyword ? {
         name: {
             $regex: req.query.keyword,
             $options: 'i'
         }
     } : {};
-
+    //Get number of documents for pagination and find products that match the keyword
     const count = await Product.countDocuments({ ...keyword });
     const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
 
@@ -25,10 +25,11 @@ export const getAllProducts = asyncHandler(async (req, res) => {
 /////GET PRODUCTS BY CATEGORY/////
 //All users: No authentication//
 export const getProductsByCategory = asyncHandler(async (req, res) => {
+    //Check for a category and set page size limit
     const cat = req.query.category ? req.query.category : {};
     const pageSize = 8;
     const page = +req.query.pageNumber || 1;
-
+    //Return documents matching the searched category and limit results per page
     const count = await Product.countDocuments({ category: cat });
     const products = await Product.find({ category: cat }).limit(pageSize).skip(pageSize * (page - 1));
 
@@ -53,6 +54,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 /////CREATE NEW PRODUCT/////
 //Admin users only//
 export const createProduct = asyncHandler(async (req, res) => {
+    //Create a dummy product for admin to update
     const product = new Product({
         name: 'My New Product',
         image: '/images/sample.jpg',
@@ -76,7 +78,7 @@ export const editProduct = asyncHandler(async (req, res) => {
     const { name, price, description, image, category, sale, inStock, salePrice } = req.body;
 
     const product = await Product.findByIdAndUpdate(req.params.id);
-
+    //Check for product and upate with new information supplied by user
     if (product) {
         product.name = name;
         product.price = price;
@@ -112,21 +114,23 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 export const createReview = asyncHandler(async (req, res) => {
     const { rating, comment } = req.body;
     const product = await Product.findById(req.params.id);
-
+    //Check whether there is a product with that ID and whether user has already reviewed it
     if (product) {
-        console.log(product.name);
         const submittedReview = product.reviews.find(review => review.user.toString() === req.user._id.toString());
         if (submittedReview) {
             res.status(400);
             throw new Error('You have already submitted a review for this product');
         }
+        // Create new review instance
         const review = {
             name: req.user.name,
             rating: +rating,
             comment,
             user: req.user._id
         };
+        // Add the new review to the array of reviews on the product
         product.reviews.push(review);
+        // Calculate the average rating based on the number of reviews
         product.numReviews = product.reviews.length;
         product.rating = product.reviews.reduce((acc, cur) => cur.rating + acc, 0) / product.reviews.length;
         await product.save();

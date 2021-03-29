@@ -36,11 +36,10 @@ const CompletedOrderPage = ({ match }) => {
             }
 
         };
-
         fetchOrder();
-
     }, [match, user]);
 
+    //Admin button for updating item to shipped status
     const updateToShippedHandler = () => {
         try {
             axios.patch(`/api/orders/${match.params.id}/shipped`, {}, {
@@ -117,7 +116,7 @@ const CompletedOrderPage = ({ match }) => {
                                 </ListGroup.Item>
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
                                     <p className="m-0"><strong>Tax: </strong></p>
-                                ${orderData.tax}
+                                ${orderData.tax.toFixed(2)}
                                 </ListGroup.Item>
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
                                     <p className="m-0"><strong>Total price: </strong></p>

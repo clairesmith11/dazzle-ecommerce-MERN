@@ -37,7 +37,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 //All users: No authentication//
 export const registerNewUser = asyncHandler(async (req, res) => {
     const { email, name, password } = req.body;
-
+    //Check if user already has an account
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         res.status(400);
@@ -73,7 +73,7 @@ export const getUserById = asyncHandler(async (req, res) => {
 //Protected route: only user with valid token//
 export const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-
+    //If the user exists, update the password to the requested value
     if (user) {
         user.password = req.body.password;
     } else {
@@ -91,6 +91,8 @@ export const updateUser = asyncHandler(async (req, res) => {
     });
 });
 
+/////GET USER'S WISHLIST/////
+//Protected route//
 export const getUserWishlist = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
@@ -104,11 +106,11 @@ export const getUserWishlist = asyncHandler(async (req, res) => {
 
 /////ADD ITEM TO USER WISHLIST/////
 //Protected route//
-//api/user/:productId/wishlist
 export const addItemToWishlist = asyncHandler(async (req, res) => {
+    //Find the logged in user and they product they wish to add
     const user = await User.findById(req.user._id);
     const product = await Product.findById(req.params.productId);
-
+    //If the product exists, check whether it is already on the wishlist
     if (product) {
         const wishlistedProduct = user.wishlist.find(item => item._id.toString() === req.params.productId.toString());
         if (wishlistedProduct) {
@@ -121,7 +123,7 @@ export const addItemToWishlist = asyncHandler(async (req, res) => {
             price: product.price,
             image: product.image
         };
-
+        //Add the new item to the wishlist array on the user instance
         user.wishlist.push(newWishlistItem);
         await user.save();
         res.status(201).json(newWishlistItem);
@@ -136,7 +138,7 @@ export const addItemToWishlist = asyncHandler(async (req, res) => {
 //Admin users only//
 export const deleteProductFromWishlist = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-
+    //Remove the selected product from the array of items on the user wishlist instance
     user.wishlist = user.wishlist.filter(item => item._id.toString() !== req.params.productId.toString());
     console.log(req.params.productId);
     user.save();

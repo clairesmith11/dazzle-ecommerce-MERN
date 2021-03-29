@@ -11,14 +11,18 @@ import { createOrder } from '../actions/orderActions';
 
 const OrderPage = ({ history }) => {
     const dispatch = useDispatch();
+
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
+
     const bag = useSelector(state => state.bag);
     const { bagItems } = bag;
     const { shippingAddress, paymentMethod } = bag;
+
     const newOrder = useSelector(state => state.order);
     const { order, loading, success, error } = newOrder;
 
+    //Set and format prices
     const itemsPrice = bagItems.reduce((acc, cur) => (acc + (cur.price * cur.quantity)), 0);
     const shippingPrice = itemsPrice < 200 ? 9.99 : 0;
     const taxesPrice = +(itemsPrice * 0.07).toFixed(2);
@@ -26,6 +30,7 @@ const OrderPage = ({ history }) => {
 
     const formattedAddress = `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.usState} ${shippingAddress.zipCode}`;
 
+    //Dispatch action to add user order to DB
     const placeOrderHandler = () => {
         dispatch(createOrder({
             user: user.id,
@@ -39,6 +44,7 @@ const OrderPage = ({ history }) => {
 
     };
 
+    //If order was successfully placed, redirect to the completed order page 
     useEffect(() => {
         if (success && !loading) {
             setTimeout(() => {

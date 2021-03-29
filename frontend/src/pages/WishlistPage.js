@@ -9,9 +9,11 @@ import { getUserWishlist } from '../actions/wishlistActions';
 
 const WishlistPage = () => {
     const dispatch = useDispatch();
+
     const wishlist = useSelector(state => state.wishlist);
     const { wishlistItems, loading, error } = wishlist;
 
+    //On component render, fetch the user's wishlist from the database
     useEffect(() => {
         dispatch(getUserWishlist());
     }, [dispatch]);

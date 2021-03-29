@@ -52,6 +52,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
 
+    // Add payment details to order instance
     if (order) {
         order.isPaid = true;
         order.paidAt = Date.now();
@@ -76,6 +77,7 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
 export const updateOrderToShipped = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
 
+    //Add shipping info to order instance
     if (order) {
         order.isShipped = true;
         order.shippedAt = Date.now();

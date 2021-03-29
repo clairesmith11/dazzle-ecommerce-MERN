@@ -19,6 +19,7 @@ const Home = ({ match }) => {
     const productList = useSelector(state => state.productList);
     const { loading, error, products, pages, page } = productList;
 
+    //On Component render, fetch all products from the database
     useEffect(() => {
         dispatch(listProducts(keyword, pageNumber, cat));
     }, [dispatch, keyword, pageNumber, cat]);

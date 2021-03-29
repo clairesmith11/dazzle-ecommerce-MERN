@@ -4,6 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 const SearchBar = ({ history }) => {
     const [keyword, setKeyword] = useState('');
 
+    //Search products by keyword
     const submitHandler = (e) => {
         e.preventDefault();
         if (keyword.trim()) {

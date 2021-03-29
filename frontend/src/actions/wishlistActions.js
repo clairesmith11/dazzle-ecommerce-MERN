@@ -9,7 +9,7 @@ export const getUserWishlist = () => async (dispatch, getState) => {
     const userAuth = getState().user.user;
     try {
         dispatch({ type: WISHLIST_USER_REQUEST });
-
+        //Get the wishlist from the user object
         const { data } = await axios.get('/api/users/wishlist', {
             headers: {
                 Authorization: `Bearer ${userAuth.token}`

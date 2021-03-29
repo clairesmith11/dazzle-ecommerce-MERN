@@ -7,10 +7,12 @@ import { addItemToBag, removeItemFromBag } from '../actions/bagActions';
 const BagItem = ({ item }) => {
     const dispatch = useDispatch();
 
+    //Add and subtract item quantity and add that number of items to the shopping bag
     const changeQuantityHandler = (qty) => {
         dispatch(addItemToBag(item.product, qty));
     };
 
+    //Remove the selected item from the shopping bag
     const removeFromBagHandler = (id) => {
         dispatch(removeItemFromBag(id));
     };

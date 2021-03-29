@@ -7,7 +7,9 @@ import {
 } from '../constants/bagConstants';
 
 export const addItemToBag = (id, quantity) => async (dispatch, getState) => {
+    //Get product info for supplied ID
     const { data } = await axios.get(`/api/products/${id}`);
+    //Add item to the bag list
     dispatch({
         type: BAG_ADD_ITEM,
         payload: {

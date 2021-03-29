@@ -13,6 +13,7 @@ const Header = ({ history, location }) => {
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
 
+    //Log user out and redirect to sign in page
     const logOutHandler = () => {
         dispatch(userLogout());
         history.push('/login');

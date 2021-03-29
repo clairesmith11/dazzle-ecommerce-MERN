@@ -8,6 +8,7 @@ const CheckoutSummary = () => {
     const bag = useSelector(state => state.bag);
     const { bagItems } = bag;
 
+    //Function for rounding all prices to two decimal places
     const roundNumbers = (num) => {
         return num.toFixed(2);
     };

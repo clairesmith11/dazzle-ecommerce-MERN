@@ -10,6 +10,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 const UserAccountPage = ({ history }) => {
     const userInfo = useSelector(state => state.user);
     const { user } = userInfo;
+
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [updatedPassword, setUpdatedPassword] = useState('');
@@ -18,6 +19,7 @@ const UserAccountPage = ({ history }) => {
     const [error, setError] = useState(null);
     const [userOrders, setUserOrders] = useState(null);
 
+    //On component render, fecth the user's orders from the database
     useEffect(() => {
         //If no user is logged in, redirect to sign in page
         if (!user) {
@@ -41,6 +43,7 @@ const UserAccountPage = ({ history }) => {
         }
     }, [history, user]);
 
+    //Button to toggle the password update form
     const toggleForm = (formType) => {
         if (formType === 'password') {
             setShowPasswordForm(!showPasswordForm);
@@ -49,6 +52,7 @@ const UserAccountPage = ({ history }) => {
         }
     };
 
+    //User update password
     const updatePassword = async (e) => {
         e.preventDefault();
         try {
@@ -97,35 +101,6 @@ const UserAccountPage = ({ history }) => {
                                             variant="primary"
                                             type="submit"
                                             className="mb-3 btn-sm">Update</Button>
-                                    </Form>
-                                }
-                                <Card.Text>
-                                    8464 N 1000 E
-                                <br />
-                                Lafayette, IN 47905
-                            </Card.Text>
-                                <Button variant="link" className="mb-3 btn-sm" onClick={() => toggleForm('address')}>Change address</Button>
-                                {showAddressForm &&
-                                    <Form>
-                                        <Form.Group>
-                                            <Form.Label>Street</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter street address" />
-                                        </Form.Group>
-                                        <Form.Group>
-                                            <Form.Label>City</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter city" />
-                                        </Form.Group>
-                                        <Form.Group>
-                                            <Form.Label>Zip Code</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter zip code" />
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" className="btn-sm">Update</Button>
                                     </Form>
                                 }
                             </Card.Body>

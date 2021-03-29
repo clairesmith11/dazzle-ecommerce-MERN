@@ -16,6 +16,7 @@ const Review = ({ product }) => {
     const [loading, setLoading] = useState('');
     const [message, setMessage] = useState(null);
 
+    //Submit user review and display message to confirm
     const submitReviewHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
