@@ -12,6 +12,7 @@ router.route('/')
     .post(authMiddleware.protectRoute, authMiddleware.isAdmin, productController.createProduct);
 
 router.get('/collections', productController.getProductsByCategory);
+router.get('/top', productController.getTopRatedProducts);
 
 router.post('/:id/reviews', authMiddleware.protectRoute, productController.createReview);
 

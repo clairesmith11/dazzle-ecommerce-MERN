@@ -9,6 +9,7 @@ import Product from '../components/Product';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
+import TopProducts from '../components/TopProducts';
 
 const Home = ({ match }) => {
     const keyword = match.params.keyword;
@@ -35,6 +36,8 @@ const Home = ({ match }) => {
                     <LinkContainer to={`/collections/bracelets`}><Button className="my-1">Bracelets</Button></LinkContainer>
                     <LinkContainer to={`/collections/watches`}><Button className="my-1">Watches</Button></LinkContainer>
                 </Row>
+                <h1>Top Rated Products</h1>
+                <TopProducts />
                 <h1>Latest Products</h1>
                 {loading ? <LoadingSpinner size="large" /> : error ? <Message message={error} type="danger" heading="Error" /> :
                     <React.Fragment>

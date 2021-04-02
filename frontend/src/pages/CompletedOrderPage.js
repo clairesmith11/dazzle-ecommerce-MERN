@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 import Message from '../components/Message';
 import LoadingSpinner from '../components/LoadingSpinner';
+import StripePayment from '../components/StripePayment';
 
 const CompletedOrderPage = ({ match }) => {
     const userDetails = useSelector(state => state.user);
@@ -13,6 +16,10 @@ const CompletedOrderPage = ({ match }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isShipped, setIsShipped] = useState(false);
+
+    const stripePromise = loadStripe(
+        'pk_test_51IbsjLFEAqxYQIXj2yLrHQp52SwzauS1fq1Nx6C1Ry05RcSIRcTsO8SzarDsqNcDOYGcWIHDTfQjyS5kPZobze9O00zNmIpAB9'
+    );
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -32,12 +39,12 @@ const CompletedOrderPage = ({ match }) => {
                 setLoading(false);
             } catch (err) {
                 setLoading(false);
-                console.error(err);
+                setError(error.response && error.response.data.message ? error.response.data.message : error.message);
             }
 
         };
         fetchOrder();
-    }, [match, user]);
+    }, [match, user, error]);
 
     //Admin button for updating item to shipped status
     const updateToShippedHandler = () => {
@@ -49,14 +56,14 @@ const CompletedOrderPage = ({ match }) => {
             });
             setIsShipped(true);
         } catch (err) {
-            console.error(err);
+            setError(error.response && error.response.data.message ? error.response.data.message : error.message);
         }
 
     };
 
     return (
         <div>
-            {loading ? <LoadingSpinner />
+            {loading ? <LoadingSpinner size="large" />
                 : !loading && !error && orderData ?
                     <Row className="my-5 gy-5">
                         <h2 className="my-3">Order {match.params.id.toUpperCase()}</h2>
@@ -88,7 +95,7 @@ const CompletedOrderPage = ({ match }) => {
                                 <ListGroup.Item className="d-flex justify-content-between align-items-center">
                                     <p className="m-0 d-flex"><strong>Shipping Status: </strong>
                                         {isShipped
-                                            ? <p className="text-success mx-1">Order shipped on {orderData.shippedAt.substring(0, 10)}</p>
+                                            ? <p className="text-success mx-1">Order has shipped!</p>
                                             : <p className="text-danger mx-1">Preparing your order</p>}
                                     </p>
                                     {user.isAdmin && <Button disabled={isShipped} className="btn-sm" onClick={updateToShippedHandler} variant="secondary">Update to shipped</Button>}
@@ -123,10 +130,15 @@ const CompletedOrderPage = ({ match }) => {
                                 ${(orderData.totalPrice).toFixed(2)}
                                 </ListGroup.Item>
                             </ListGroup>
-
+                            <ListGroup>
+                                <h5 className="my-3">Make payment</h5>
+                                <Elements stripe={stripePromise}>
+                                    <StripePayment order={match.params.id} />
+                                </Elements>
+                            </ListGroup>
                         </Col>
                     </Row>
-                    : <Message type="warning" message={error} />}
+                    : error && <Message type="warning" message={error} />}
         </div>
     );
 };

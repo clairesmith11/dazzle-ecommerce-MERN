@@ -10,7 +10,7 @@ router.route('/')
     .post(authMiddleware.protectRoute, orderController.createOrder);
 router.get('/my-orders', authMiddleware.protectRoute, orderController.getUserOrders);
 router.get('/:id', authMiddleware.protectRoute, orderController.getOrderById);
-router.patch('/:id/pay', authMiddleware.protectRoute, authMiddleware.isAdmin, orderController.updateOrderToPaid);
+router.patch('/:id/pay', authMiddleware.protectRoute, orderController.updateOrderToPaid);
 router.patch('/:id/shipped', authMiddleware.protectRoute, authMiddleware.isAdmin, orderController.updateOrderToShipped);
 
 

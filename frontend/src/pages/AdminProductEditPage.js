@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import { listProductDetails } from '../actions/productActions';
 import LoadingSpinner from '../components/LoadingSpinner';
+import Message from '../components/Message';
 
 const AdminProductEditPage = ({ match, history }) => {
     const productId = match.params.id;
@@ -26,6 +27,7 @@ const AdminProductEditPage = ({ match, history }) => {
 
     const [successfulUpdate, setSuccessfulUpdate] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
         if (successfulUpdate) {
@@ -67,7 +69,7 @@ const AdminProductEditPage = ({ match, history }) => {
             });
             setSuccessfulUpdate(true);
         } catch (err) {
-            console.log(err);
+            setErrorMessage(err.response && err.response.data.message ? err.response.data.message : err.message);
         }
     };
 
@@ -99,93 +101,95 @@ const AdminProductEditPage = ({ match, history }) => {
             <h2 className="my-3">Edit product</h2>
             <Link to="/admin/products" className="btn btn-outline-primary my-3">Go back</Link>
             {loading ? <LoadingSpinner /> :
-                <Form className="form-container" onSubmit={submitHandler}>
-                    <Form.Group>
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter product name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Enter price"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter category"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Number in Stock</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Enter number in stock"
-                            value={inStock}
-                            onChange={(e) => setInStock(e.target.value)} />
-                    </Form.Group>
+                errorMessage ? <Message type="danger" message={errorMessage} /> :
+                    error ? <Message type="danger" message={error} /> :
+                        <Form className="form-container" onSubmit={submitHandler}>
+                            <Form.Group>
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter product name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter price"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter category"
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Number in Stock</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter number in stock"
+                                    value={inStock}
+                                    onChange={(e) => setInStock(e.target.value)} />
+                            </Form.Group>
 
-                    <Form.Group>
-                        <Form.Label>Image</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter image URL"
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)} />
-                        <Form.File
-                            id="image-file"
-                            label="Choose File"
-                            custom
-                            onChange={uploadFileHandler}></Form.File>
-                        {uploading && <LoadingSpinner />}
-                    </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Image</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter image URL"
+                                    value={image}
+                                    onChange={(e) => setImage(e.target.value)} />
+                                <Form.File
+                                    id="image-file"
+                                    label="Choose File"
+                                    custom
+                                    onChange={uploadFileHandler}></Form.File>
+                                {uploading && <LoadingSpinner />}
+                            </Form.Group>
 
-                    <Form.Group>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Enter description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)} />
-                    </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    placeholder="Enter description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)} />
+                            </Form.Group>
 
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>On Sale?</Form.Label>
-                        <div key='radio' className="mb-3" onChange={(e) => { e.target.value === "false" ? setSale(false) : setSale(true); }}>
-                            <Form.Check
-                                type="radio"
-                                name="sale"
-                                label="No"
-                                value="false"
-                            />
+                            <Form.Group controlId="exampleForm.ControlSelect1">
+                                <Form.Label>On Sale?</Form.Label>
+                                <div key='radio' className="mb-3" onChange={(e) => { e.target.value === "false" ? setSale(false) : setSale(true); }}>
+                                    <Form.Check
+                                        type="radio"
+                                        name="sale"
+                                        label="No"
+                                        value="false"
+                                    />
 
-                            <Form.Check
-                                type="radio"
-                                name="sale"
-                                label="Yes"
-                                value="true"
-                            />
-                        </div>
-                    </Form.Group>
-                    {sale && <Form.Group>
-                        <Form.Label>Sale Price</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Enter sale price"
-                            value={salePrice}
-                            onChange={(e) => setSalePrice(e.target.value)} />
-                    </Form.Group>}
-                    <Button type="submit" variant="primary">Update</Button>
-                </Form>}
+                                    <Form.Check
+                                        type="radio"
+                                        name="sale"
+                                        label="Yes"
+                                        value="true"
+                                    />
+                                </div>
+                            </Form.Group>
+                            {sale && <Form.Group>
+                                <Form.Label>Sale Price</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter sale price"
+                                    value={salePrice}
+                                    onChange={(e) => setSalePrice(e.target.value)} />
+                            </Form.Group>}
+                            <Button type="submit" variant="primary">Update</Button>
+                        </Form>}
         </div>
     );
 };

@@ -15,7 +15,7 @@ const Tab = ({ product }) => {
                     {product.reviews.length === 0 ? <p className="my-3">This product doesn't have any reviews yet!</p>
                         : product.reviews.map(review => {
                             return (
-                                <div className="my-3">
+                                <div className="my-3" key={review._id}>
                                     <div className="d-flex align-items-center">
                                         <p className="my-0 mr-3"><strong>{review.name}</strong></p>
                                         <Rating rating={review.rating} />

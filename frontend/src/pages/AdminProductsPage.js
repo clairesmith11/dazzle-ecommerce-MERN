@@ -55,7 +55,7 @@ const AdminProductsPage = ({ history, match }) => {
                 });
                 setSuccessfulDelete(true);
             } catch (err) {
-                setErrorDelete(err.response.data.message);
+                setErrorDelete(error.response && error.response.data.message ? error.response.data.message : error.message);
             }
         }
 
@@ -67,24 +67,26 @@ const AdminProductsPage = ({ history, match }) => {
                 <h2>Products</h2>
                 <Button variant="primary" onClick={createProductHandler}>{loadingCreate ? <LoadingSpinner /> : '+ Create product'}</Button>
             </Row>
+            {errorDelete && <Message type="danger" message={errorDelete} />}
             <Table striped bordered hover>
                 {loading ? <LoadingSpinner size="large" /> :
                     error ? <Message type="danger" message={error} /> :
-                        <thead>
-                            <tr>
-                                <th>Product ID</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Sale</th>
-                                <th>Category</th>
-                            </tr>
-                        </thead>}
+                        errorCreate ? <Message type="danger" message={errorCreate} /> :
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Sale</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>}
                 <tbody>
-                    {errorDelete && <Message type="danger" message={errorDelete} />}
+
                     {products &&
                         products.map(product => {
                             return (
-                                <tr>
+                                <tr key={product._id}>
                                     <td>{product._id}</td>
                                     <td>{product.name}</td>
                                     <td>{product.salePrice ? `$${product.salePrice}` : `$${product.price}`}</td>

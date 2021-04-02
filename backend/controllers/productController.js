@@ -36,6 +36,13 @@ export const getProductsByCategory = asyncHandler(async (req, res) => {
     res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
+/////GET TOP RATED PRODUCTS/////
+//All users: No authentication//
+export const getTopRatedProducts = asyncHandler(async (req, res) => {
+    const products = await Product.find({}).sort({ rating: -1 }).limit(4);
+    res.json(products);
+});
+
 /////GET SINGLE PRODUCT BY ID/////
 //All users: No authentication//
 export const getProductById = asyncHandler(async (req, res) => {

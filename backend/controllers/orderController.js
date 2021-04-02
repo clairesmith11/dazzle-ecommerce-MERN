@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-
+import stripe from 'stripe';
 import Order from '../models/orderModel.js';
 
 /////GET ALL ORDERS/////
@@ -50,6 +50,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 /////Update Order to paid/////
 //Admin only//
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
+    const { paymentMethod } = req.body;
     const order = await Order.findById(req.params.id);
 
     // Add payment details to order instance
@@ -57,14 +58,12 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
         order.isPaid = true;
         order.paidAt = Date.now();
         order.paymentResult = {
-            id: req.body.id,
-            status: req.body.status,
-            updateTime: req.body.update_time,
-            email: req.body.payer.email_address
+            id: paymentMethod.id,
         };
-
         const updatedOrder = await order.save();
-        res.json(updatedOrder);
+
+        res.json({ order: updatedOrder });
+
     } else {
         res.status(404);
         throw new Error('Order not found');
