@@ -2,29 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { PayPalButton } from 'react-paypal-button-v2';
 
 import Message from '../components/Message';
 import LoadingSpinner from '../components/LoadingSpinner';
-import StripePayment from '../components/StripePayment';
 
 const CompletedOrderPage = ({ match }) => {
     const userDetails = useSelector(state => state.user);
     const { user } = userDetails;
+
     const [orderData, setOrderData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isShipped, setIsShipped] = useState(false);
-
-    const stripePromise = loadStripe(
-        'pk_test_51IbsjLFEAqxYQIXj2yLrHQp52SwzauS1fq1Nx6C1Ry05RcSIRcTsO8SzarDsqNcDOYGcWIHDTfQjyS5kPZobze9O00zNmIpAB9'
-    );
+    const [isPaid, setIsPaid] = useState(false);
+    const [sdkReady, setSdkReady] = useState(false);
 
     useEffect(() => {
+        //Get paypal client id from server
+        const addPaypalScript = async () => {
+            const { data: clientId } = await axios.get('/api/config/paypal');
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `https://paypal.com/sdk/js?client-id=${clientId}`;
+            script.async = true;
+            script.onload = () => {
+                setSdkReady(true);
+            };
+            document.body.appendChild(script);
+        };
+
+        //Fetch order from database
         const fetchOrder = async () => {
             setLoading(true);
-            //Fetch order from database
             try {
                 const { data } = await axios.get(`/api/orders/${match.params.id}`, {
                     headers:
@@ -43,22 +53,52 @@ const CompletedOrderPage = ({ match }) => {
             }
 
         };
-        fetchOrder();
-    }, [match, user, error]);
+
+        if (!orderData || isPaid) {
+            fetchOrder();
+        } else if (!orderData.isPaid) {
+            if (!window.paypal) {
+                try {
+                    addPaypalScript();
+                } catch (err) {
+                    setError(err);
+                }
+
+            }
+        } else {
+            setSdkReady(true);
+        }
+
+    }, [match, user, error, isPaid, orderData]);
 
     //Admin button for updating item to shipped status
-    const updateToShippedHandler = () => {
+    const updateToShippedHandler = async () => {
         try {
-            axios.patch(`/api/orders/${match.params.id}/shipped`, {}, {
+            await axios.patch(`/api/orders/${match.params.id}/shipped`, {}, {
                 headers: {
                     Authorization: `Bearer ${user.token}`
                 }
             });
             setIsShipped(true);
         } catch (err) {
-            setError(error.response && error.response.data.message ? error.response.data.message : error.message);
+            setError(err.response && err.response.data.message ? err.response.data.message : err.message);
         }
 
+    };
+
+    //Handle successuful payment
+    const successPaymentHandler = (paymentResult) => {
+        console.log(paymentResult);
+        try {
+            axios.patch(`/api/orders/${orderData._id}/pay`, { paymentResult }, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            });
+            setIsPaid(true);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
@@ -129,13 +169,15 @@ const CompletedOrderPage = ({ match }) => {
                                     <p className="m-0"><strong>Total price: </strong></p>
                                 ${(orderData.totalPrice).toFixed(2)}
                                 </ListGroup.Item>
+                                {!orderData.isPaid && (
+                                    <ListGroup.Item>
+                                        {!sdkReady ? <LoadingSpinner /> : (
+                                            <PayPalButton amount={orderData.totalPrice} onSuccess={successPaymentHandler} />
+                                        )}
+                                    </ListGroup.Item>
+                                )}
                             </ListGroup>
-                            <ListGroup>
-                                <h5 className="my-3">Make payment</h5>
-                                <Elements stripe={stripePromise}>
-                                    <StripePayment order={match.params.id} />
-                                </Elements>
-                            </ListGroup>
+
                         </Col>
                     </Row>
                     : error && <Message type="warning" message={error} />}

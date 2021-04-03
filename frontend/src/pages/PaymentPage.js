@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
+
 import Breadcrumbs from '../components/Breadcrumbs';
 import { savePaymentMethod } from '../actions/bagActions';
+
 
 const PaymentPage = ({ history }) => {
     const dispatch = useDispatch();
     const bag = useSelector(state => state.bag);
     const { shippingAddress } = bag;
-    const [paymentMethod, setPaymentMethod] = useState('PayPal');
+    const [paymentMethod, setPaymentMethod] = useState('Paypal');
 
     const savePaymentHandler = () => {
         dispatch(savePaymentMethod(paymentMethod));
@@ -33,13 +35,6 @@ const PaymentPage = ({ history }) => {
                         label="Paypal"
                         name="payment"
                         value="Paypal"
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <Form.Check
-                        type="radio"
-                        label="Stripe"
-                        name="payment"
-                        value="Stripe"
                         onChange={(e) => setPaymentMethod(e.target.value)}
                     />
                 </Form.Group>

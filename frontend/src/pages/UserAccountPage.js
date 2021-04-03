@@ -110,7 +110,7 @@ const UserAccountPage = ({ history }) => {
                         <h5>My Orders</h5>
                         <Card className="my-3">
                             {loading ?
-                                <LoadingSpinner /> :
+                                <LoadingSpinner size="large" /> :
                                 !error && userOrders ?
                                     <Card.Body>
                                         <ListGroup>

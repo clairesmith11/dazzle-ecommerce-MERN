@@ -28,7 +28,6 @@ const orderSchema = mongoose.Schema({
         id: { type: String },
         status: { type: String },
         updateTime: { type: String },
-        email: { type: String }
     },
     tax: {
         type: Number,

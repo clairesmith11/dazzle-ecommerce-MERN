@@ -1,5 +1,4 @@
 import asyncHandler from 'express-async-handler';
-import stripe from 'stripe';
 import Order from '../models/orderModel.js';
 
 /////GET ALL ORDERS/////
@@ -47,10 +46,11 @@ export const createOrder = asyncHandler(async (req, res) => {
     res.status(201).json({ order: newOrder });
 });
 
+
 /////Update Order to paid/////
 //Admin only//
 export const updateOrderToPaid = asyncHandler(async (req, res) => {
-    const { paymentMethod } = req.body;
+    const { paymentResult } = req.body;
     const order = await Order.findById(req.params.id);
 
     // Add payment details to order instance
@@ -58,7 +58,9 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
         order.isPaid = true;
         order.paidAt = Date.now();
         order.paymentResult = {
-            id: paymentMethod.id,
+            id: paymentResult.id,
+            status: paymentResult.status,
+            updateTime: paymentResult.update_time
         };
         const updatedOrder = await order.save();
 
