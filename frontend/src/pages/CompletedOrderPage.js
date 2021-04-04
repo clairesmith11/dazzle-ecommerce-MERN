@@ -24,7 +24,7 @@ const CompletedOrderPage = ({ match }) => {
             const { data: clientId } = await axios.get('/api/config/paypal');
             const script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = `https://paypal.com/sdk/js?client-id=${clientId}`;
+            script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
             script.async = true;
             script.onload = () => {
                 setSdkReady(true);
@@ -49,7 +49,7 @@ const CompletedOrderPage = ({ match }) => {
                 setLoading(false);
             } catch (err) {
                 setLoading(false);
-                setError(error.response && error.response.data.message ? error.response.data.message : error.message);
+                setError(err.response && err.response.data.message ? err.response.data.message : err.message);
             }
 
         };
@@ -73,14 +73,17 @@ const CompletedOrderPage = ({ match }) => {
 
     //Admin button for updating item to shipped status
     const updateToShippedHandler = async () => {
+        setLoading(true);
         try {
             await axios.patch(`/api/orders/${match.params.id}/shipped`, {}, {
                 headers: {
                     Authorization: `Bearer ${user.token}`
                 }
             });
+            setLoading(false);
             setIsShipped(true);
         } catch (err) {
+            setLoading(false);
             setError(err.response && err.response.data.message ? err.response.data.message : err.message);
         }
 
@@ -88,7 +91,6 @@ const CompletedOrderPage = ({ match }) => {
 
     //Handle successuful payment
     const successPaymentHandler = (paymentResult) => {
-        console.log(paymentResult);
         try {
             axios.patch(`/api/orders/${orderData._id}/pay`, { paymentResult }, {
                 headers: {
@@ -97,7 +99,7 @@ const CompletedOrderPage = ({ match }) => {
             });
             setIsPaid(true);
         } catch (err) {
-            console.log(err);
+            setError(err);
         }
     };
 
@@ -110,34 +112,36 @@ const CompletedOrderPage = ({ match }) => {
                         <Col md={6}>
                             <ListGroup>
                                 <h5 className="my-3">Shipping Details</h5>
-                                <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0"><strong>Name: </strong>{orderData.user.name}</p>
+                                <ListGroup.Item className="d-flex">
+                                    <p className="mr-1"><strong>Name: </strong></p>
+                                    <p>{orderData.user.name}</p>
                                 </ListGroup.Item>
-                                <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0"><strong>Shipping to: </strong><br />
+                                <ListGroup.Item>
+                                    <div className="d-flex">
+                                        <p className="mr-1"><strong>Shipping to: </strong></p>
                                         <p>{orderData.shippingAddress.address}<br />
                                             {orderData.shippingAddress.city}, {orderData.shippingAddress.usState} {orderData.shippingAddress.zipCode}
                                         </p>
-                                    </p>
+                                    </div>
                                 </ListGroup.Item>
-                                <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0"><strong>Payment Method: </strong>{orderData.paymentMethod}</p>
-                                </ListGroup.Item>
-
-                                <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0 d-flex"><strong>Payment Status: </strong>
-                                        {orderData.isPaid
-                                            ? <p className="text-success mx-1">Payment received!</p>
-                                            : <p className="text-danger mx-1">Awaiting payment</p>}
-                                    </p>
+                                <ListGroup.Item className="d-flex">
+                                    <p className="mr-1"><strong>Payment Method: </strong>{orderData.paymentMethod}</p>
                                 </ListGroup.Item>
 
-                                <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                                    <p className="m-0 d-flex"><strong>Shipping Status: </strong>
-                                        {isShipped
-                                            ? <p className="text-success mx-1">Order has shipped!</p>
-                                            : <p className="text-danger mx-1">Preparing your order</p>}
-                                    </p>
+                                <ListGroup.Item className="d-flex">
+                                    <p className="mr-1"><strong>Payment Status: </strong></p>
+                                    {orderData.isPaid
+                                        ? <p className="text-success">Payment received!</p>
+                                        : <p className="text-danger">Awaiting payment</p>}
+
+                                </ListGroup.Item>
+
+                                <ListGroup.Item className="d-flex">
+                                    <p className="mr-1"><strong>Shipping Status: </strong></p>
+                                    {isShipped
+                                        ? <p className="text-success mr-5">Order has shipped!</p>
+                                        : <p className="text-danger mr-5">Preparing your order</p>}
+
                                     {user.isAdmin && <Button disabled={isShipped} className="btn-sm" onClick={updateToShippedHandler} variant="secondary">Update to shipped</Button>}
                                 </ListGroup.Item>
                             </ListGroup>
