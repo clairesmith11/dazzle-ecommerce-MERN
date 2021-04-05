@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Image } from 'react-bootstrap';
 import axios from 'axios';
 
+import Meta from '../components/meta';
 import Rating from '../components/Rating';
 import Tab from '../components/Tab';
 import QuantityButton from '../components/QuantityButton';
@@ -102,6 +103,7 @@ const ProductPage = ({ history, match }) => {
                     : errorMessage ? <Message type="danger" message={errorMessage} />
                         :
                         <Row>
+                            <Meta title={product.name} />
                             <Col md={6}>
                                 <Image src={product.image} alt={product.name} fluid />
                             </Col>

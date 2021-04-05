@@ -4,6 +4,7 @@ import { Row, Col, Container, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { listProducts } from '../actions/productActions';
+import Meta from '../components/meta';
 import BannerCarousel from '../components/BannerCarousel';
 import Product from '../components/Product';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -27,7 +28,8 @@ const Home = ({ match }) => {
 
     return (
         <div>
-            <BannerCarousel />
+            <Meta />
+            {!keyword && <BannerCarousel />}
             <Container>
                 <Row className="d-flex justify-content-around my-5">
                     <LinkContainer to={`/`}><Button className="my-1">All Collections</Button></LinkContainer>
@@ -36,8 +38,8 @@ const Home = ({ match }) => {
                     <LinkContainer to={`/collections/bracelets`}><Button className="my-1">Bracelets</Button></LinkContainer>
                     <LinkContainer to={`/collections/watches`}><Button className="my-1">Watches</Button></LinkContainer>
                 </Row>
-                <h1>Top Rated Products</h1>
-                <TopProducts />
+                {!keyword && !cat && <h1>Top Rated Products</h1>}
+                {!keyword && !cat && <TopProducts />}
                 <h1>Latest Products</h1>
                 {loading ? <LoadingSpinner size="large" /> : error ? <Message message={error} type="danger" heading="Error" /> :
                     <React.Fragment>
