@@ -1,3 +1,5 @@
+![Dazzle landing page](./siteImages/project-2.png)
+
 ## Overview
 
 An ecommerce app for a jewelry store built with React, Node/Express and MongoDb. UI built using Bootstrap components for React.
